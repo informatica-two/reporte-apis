@@ -1,9 +1,5 @@
-import { AreaChartDemo } from "@/components/charts/area-chart";
+import { DashboardPage } from "@/components/dashboard/dashboard-page";
 
 export default function Home() {
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-8">
-      <AreaChartDemo />
-    </div>
-  );
+  return <DashboardPage />;
 }

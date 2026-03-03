@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
+import type { FechasParams } from "@/api/types"
 
 const chartData = [
   { date: "2024-04-01", desktop: 222, mobile: 150 },
@@ -39,7 +40,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function AreaChartDemo() {
+export function AreaChartDemo({ fechas }: { fechas?: FechasParams | null }) {
   return (
     <Card>
       <CardHeader>

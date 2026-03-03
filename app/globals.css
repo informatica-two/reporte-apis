@@ -47,38 +47,38 @@
 
 :root {
   --radius: 0.625rem;
-  /* Vogue palette */
-  --background: #dfa6ae; /* Rosa empolvado - fondo principal */
-  --foreground: #9e1b2f; /* Rojo vino - texto/logo principal */
-  --card: #e8bfc6; /* Rosa suave */
+  /* Vogue - UI tranquila: colores principales solo para texto, bordes, botones clave */
+  --background: #ffffff;
+  --foreground: #9e1b2f; /* Rojo vino - textos */
+  --card: #ffffff;
   --card-foreground: #9e1b2f;
-  --popover: #e8bfc6;
+  --popover: #ffffff;
   --popover-foreground: #9e1b2f;
-  --primary: #7e1425; /* Borgoña profundo */
+  --primary: #7e1425; /* Borgoña - botones seleccionados/acciones */
   --primary-foreground: #ffffff;
-  --secondary: #e8bfc6;
+  --secondary: #f8f6f7; /* Gris muy suave con tinte rosa */
   --secondary-foreground: #9e1b2f;
-  --muted: #e8bfc6;
-  --muted-foreground: #7e1425;
-  --accent: #9e1b2f;
-  --accent-foreground: #ffffff;
+  --muted: #f8f6f7;
+  --muted-foreground: #8b6b70; /* Rojo apagado para secundario */
+  --accent: #f8f6f7; /* Hover suave - casi blanco */
+  --accent-foreground: #9e1b2f;
   --destructive: #7e1425;
-  --border: rgba(158, 27, 47, 0.2);
-  --input: rgba(158, 27, 47, 0.15);
-  --ring: #9e1b2f;
+  --border: rgba(158, 27, 47, 0.12);
+  --input: rgba(158, 27, 47, 0.08);
+  --ring: rgba(158, 27, 47, 0.25);
   --chart-1: #9e1b2f;
   --chart-2: #7e1425;
   --chart-3: #dfa6ae;
   --chart-4: #e8bfc6;
   --chart-5: #7e1425;
-  --sidebar: #e8bfc6;
+  --sidebar: #ffffff;
   --sidebar-foreground: #9e1b2f;
-  --sidebar-primary: #9e1b2f;
+  --sidebar-primary: #7e1425;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #dfa6ae;
+  --sidebar-accent: #f8f6f7;
   --sidebar-accent-foreground: #9e1b2f;
-  --sidebar-border: rgba(158, 27, 47, 0.15);
-  --sidebar-ring: #9e1b2f;
+  --sidebar-border: rgba(158, 27, 47, 0.1);
+  --sidebar-ring: rgba(158, 27, 47, 0.25);
 }
 
 @layer base {
