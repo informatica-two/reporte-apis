@@ -43,3 +43,27 @@ export async function apiGet<T>(url: string, params?: Record<string, string>): P
     return { success: false, error: apiError };
   }
 }
+
+/**
+ * Ejecuta una petición POST con multipart/form-data (fecha_inicio, fecha_fin).
+ * Usado por los endpoints de reporte_visual.
+ */
+export async function apiPostFormData<T>(
+  url: string,
+  params: Record<string, string>
+): Promise<ApiResult<T>> {
+  try {
+    const formData = new FormData();
+    for (const [key, value] of Object.entries(params)) {
+      formData.append(key, value);
+    }
+    const response = await vogueApi.post<T>(url, formData);
+    return { success: true, data: response.data };
+  } catch (error) {
+    const apiError = normalizeError(error);
+    if (process.env.NODE_ENV === "development") {
+      console.error(`[API Error] ${url}:`, apiError);
+    }
+    return { success: false, error: apiError };
+  }
+}

@@ -54,3 +54,59 @@ export type ApiError = {
 export type ApiResult<T> =
   | { success: true; data: T }
   | { success: false; error: ApiError };
+
+/** Respuesta base de los endpoints reporte_visual */
+export type ReporteVisualResponse<T> = {
+  success: boolean;
+  detalle: T;
+};
+
+/** Detalle del endpoint activos */
+export type ActivosDetalle = {
+  dias: number;
+  meta_diaria: number;
+  meta_diaria_mes: number;
+  total_act: number;
+  activo_neto: number;
+  fin_primer_rango: number;
+  fin_segundo_rango: number;
+  intervalo_mayor: number;
+  intervalo_menor: number;
+  total_activos_label: string;
+  activo_neto_label: string;
+  meta_activos_label: string;
+};
+
+/** Detalle del endpoint cobros */
+export type CobrosDetalle = {
+  dias: number;
+  meta_diaria: number;
+  meta_diaria_mes: number;
+  cobro_bruto: number;
+  cobro_neto: number;
+  fin_primer_rango: number;
+  fin_segundo_rango: number;
+  intervalo_mayor: number;
+  intervalo_menor: number;
+  cobro_bruto_label: string;
+  anulaciones_label: string;
+  cobro_neto_label: string;
+  meta_cobros_label: string;
+};
+
+/** Detalle del endpoint venta */
+export type VentaDetalle = {
+  dias: number;
+  meta_diaria: number;
+  meta_diaria_mes: number;
+  venta_bruta: number;
+  venta_neta: number;
+  fin_primer_rango: number;
+  fin_segundo_rango: number;
+  intervalo_mayor: number;
+  intervalo_menor: number;
+  venta_bruta_label: string;
+  devoluciones_label: string;
+  venta_neta_label: string;
+  meta_ventas_label: string;
+};
