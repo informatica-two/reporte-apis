@@ -8,25 +8,10 @@ import {
   TrendingUp,
   Receipt,
   Calendar,
-  RotateCcw,
-  XCircle,
-  BarChart3,
 } from "lucide-react";
 import { KpiCard } from "./kpi-card";
 import { formatMoney, formatNumber } from "@/lib/utils";
 import type { ReporteKpis } from "@/hooks/use-reporte-data";
-
-function formatPercent(n: number): string {
-  return new Intl.NumberFormat("es-CL", {
-    style: "percent",
-    minimumFractionDigits: 1,
-    maximumFractionDigits: 1,
-  }).format(n / 100);
-}
-
-function formatRatio(n: number): string {
-  return (Math.round(n * 10) / 10).toFixed(1) + "×";
-}
 
 /* Fila 1 — KPIs estratégicos (4) */
 const ROW1_ESTRATEGICOS = [
@@ -85,31 +70,6 @@ const ROW2_PRODUCTIVIDAD = [
   },
 ];
 
-/* Fila 3 — Calidad del ingreso (3) */
-const ROW3_CALIDAD = [
-  {
-    key: "pctDevoluciones" as const,
-    title: "% Devoluciones",
-    icon: RotateCcw,
-    format: (k: ReporteKpis) => formatPercent(k.pctDevoluciones),
-    description: "Calidad de ventas. Alto = posibles problemas.",
-  },
-  {
-    key: "pctAnulaciones" as const,
-    title: "% Anulaciones",
-    icon: XCircle,
-    format: (k: ReporteKpis) => formatPercent(k.pctAnulaciones),
-    description: "Cobros anulados. Alto = errores o fraude.",
-  },
-  {
-    key: "ratioCobrosVentas" as const,
-    title: "Ratio cobros/ventas",
-    icon: BarChart3,
-    format: (k: ReporteKpis) => formatRatio(k.ratioCobrosVentas),
-    description: ">1 cobra más de lo vendido; <1 ventas sin cobrar.",
-  },
-];
-
 type KpiCardsProps = {
   kpis: ReporteKpis;
 };
@@ -142,20 +102,6 @@ export function KpiCards({ kpis }: KpiCardsProps) {
             description={description}
             size="compact"
             variant={(i + 4) as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8}
-          />
-        ))}
-      </div>
-      {/* Fila 3 — Calidad del ingreso */}
-      <div className="grid gap-2 grid-cols-1 sm:grid-cols-3">
-        {ROW3_CALIDAD.map(({ key, title, icon, format, description }, i) => (
-          <KpiCard
-            key={key}
-            title={title}
-            value={format(kpis)}
-            icon={icon}
-            description={description}
-            size="compact"
-            variant={(i + 7) as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8}
           />
         ))}
       </div>

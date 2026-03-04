@@ -4,6 +4,9 @@ import * as React from "react";
 import { DashboardHeader } from "./dashboard-header";
 import { DashboardSkeleton } from "./dashboard-skeleton";
 import { KpiCards } from "./kpi-cards";
+import { VentasVsCobrosChart } from "./ventas-vs-cobros-chart";
+import { DesgloseVentasWaterfall } from "./desglose-ventas-waterfall";
+import { ComposicionCobrosChart } from "./composicion-cobros-chart";
 import { useReporteData } from "@/hooks/use-reporte-data";
 import type { FechasParams } from "@/api/types";
 
@@ -19,7 +22,16 @@ export function DashboardPage() {
         {state === "error" && (
           <p className="text-destructive py-8 text-center">{error}</p>
         )}
-        {state === "success" && kpis && <KpiCards kpis={kpis} />}
+        {state === "success" && kpis && (
+          <div className="flex flex-col gap-6">
+            <KpiCards kpis={kpis} />
+            <div className="grid items-stretch gap-4 lg:grid-cols-3">
+              <VentasVsCobrosChart kpis={kpis} />
+              <DesgloseVentasWaterfall kpis={kpis} />
+              <ComposicionCobrosChart kpis={kpis} />
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

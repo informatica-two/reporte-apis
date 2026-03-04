@@ -12,8 +12,12 @@ import { parseNumberLabel } from "@/lib/utils";
 
 export type ReporteKpis = {
   activoNeto: number;
+  cobroBruto: number;
   cobroNeto: number;
+  ventaBruta: number;
   ventaNeta: number;
+  devoluciones: number;
+  anulaciones: number;
   reclutamientos: number;
   arpu: number;
   cobroPromedioDia: number;
@@ -100,8 +104,12 @@ export function useReporteData(fechas: FechasParams | null) {
 
       const data: ReporteKpis = {
         activoNeto: a.activo_neto,
+        cobroBruto: c.cobro_bruto,
         cobroNeto: c.cobro_neto,
+        ventaBruta: v.venta_bruta,
         ventaNeta: v.venta_neta,
+        devoluciones,
+        anulaciones,
         reclutamientos: r,
         arpu: a.activo_neto > 0 ? c.cobro_neto / a.activo_neto : 0,
         cobroPromedioDia: dias > 0 ? c.cobro_neto / dias : 0,
