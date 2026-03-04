@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vogue Dashboard
 
-## Getting Started
+Dashboard de reportes visuales para Vogue. Muestra KPIs, ventas vs cobros, composición de ventas y composición de cobros con filtro por rango de fechas.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router)
+- **React 19**
+- **TypeScript**
+- **Tailwind CSS 4**
+- **Recharts** (gráficos)
+- **shadcn/ui** (componentes)
+- **date-fns** (fechas)
+
+## Requisitos
+
+- Node.js 18+
+- Cuenta API Vogue (usuario y contraseña)
+
+## Instalación
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Instalar dependencias
+yarn install
+# o
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Configuración
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Copia el archivo de ejemplo de variables de entorno:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cp .env.example .env
+```
 
-## Learn More
+2. Edita `.env` con tus credenciales:
 
-To learn more about Next.js, take a look at the following resources:
+```env
+VOGUE_API_BASE_URL=https://mivogue.com:83/APIs
+VOGUE_API_USER=tu_usuario
+VOGUE_API_PASSWORD=tu_password
+NEXT_PUBLIC_FRONTEND_SOURCE=vogue-web
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Comando | Descripción |
+|---------|-------------|
+| `yarn dev` | Servidor de desarrollo en [http://localhost:3000](http://localhost:3000) |
+| `yarn build` | Build de producción |
+| `yarn start` | Servidor de producción |
+| `yarn lint` | Ejecutar ESLint |
+| `yarn check-api` | Verificar conexión con la API |
 
-## Deploy on Vercel
+## Estructura del proyecto
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+├── app/                    # App Router (Next.js)
+│   ├── api/                # API routes (proxy a Vogue)
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── api/                    # Cliente y tipos de la API
+│   ├── reporteVisual.ts
+│   ├── constants.ts
+│   └── types.ts
+├── components/
+│   ├── dashboard/          # Dashboard y gráficos
+│   │   ├── dashboard-page.tsx
+│   │   ├── dashboard-header.tsx
+│   │   ├── dashboard-skeleton.tsx
+│   │   ├── kpi-cards.tsx
+│   │   ├── ventas-vs-cobros-chart.tsx
+│   │   ├── desglose-ventas-waterfall.tsx  # Composición ventas
+│   │   └── composicion-cobros-chart.tsx
+│   └── ui/                 # Componentes reutilizables
+├── hooks/
+│   ├── use-reporte-data.ts # Fetch y estado de KPIs
+│   └── use-date-range.ts
+├── lib/
+│   ├── charts/             # Lógica de gráficos (separada de UI)
+│   │   ├── ventas-vs-cobros.ts
+│   │   ├── composicion-ventas.ts
+│   │   └── composicion-cobros.ts
+│   ├── utils.ts
+│   └── date-utils.ts
+└── scripts/
+    └── check-api.mjs       # Script para probar la API
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Funcionalidades
+
+### KPIs
+- **Activos netos** – Tamaño de la red de usuarios activos
+- **Reclutamientos** – Nuevos integrantes en el período
+- **Venta neta** – Dinero vendido menos devoluciones
+- **Cobro neto** – Dinero efectivamente cobrado
+- **ARPU** – Ingreso promedio por activo
+- **Venta promedio diaria** – Ritmo diario de ventas
+- **Cobro promedio diario** – Flujo de caja diario
+
+### Gráficos
+1. **Ventas vs Cobros** – Barras comparativas con ratio e insights
+2. **Composición de ventas** – Donut: Venta bruta − Devoluciones = Venta neta
+3. **Composición de cobros** – Donut: Cobro bruto − Anulaciones = Cobro neto
+
+### Filtros
+- Selector de rango de fechas (Date Range Picker)
+- Presets: Hoy, 7 días, 30 días, Este mes, Mes anterior
+
+## API
+
+La app usa un proxy en `/api/reporte-visual/[endpoint]` para evitar CORS y no exponer credenciales en el cliente. Los endpoints consumidos son:
+
+- `activos` – Activos netos y metas
+- `cobros` – Cobros brutos, netos y anulaciones
+- `venta` – Ventas brutas, netas y devoluciones
+- `reclutamientos` – Cantidad de reclutamientos
+
+## Licencia
+
+Proyecto privado.
