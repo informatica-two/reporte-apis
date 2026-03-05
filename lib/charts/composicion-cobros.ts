@@ -4,7 +4,12 @@ export type ComposicionCobrosPieItem = {
   name: string;
   value: number;
   fill: string;
+  /** Valor real para tooltip cuando value está inflado para visibilidad */
+  actualValue?: number;
 };
+
+/** Mínimo % del total para que un segmento sea visible en el donut */
+const MIN_VISIBLE_PCT = 0.02;
 
 export type ComposicionCobrosData = {
   pieData: ComposicionCobrosPieItem[];
@@ -20,9 +25,25 @@ export type ComposicionCobrosData = {
 export function getComposicionCobrosData(kpis: ReporteKpis): ComposicionCobrosData {
   const { cobroBruto, cobroNeto, anulaciones, pctAnulaciones } = kpis;
 
+  const total = cobroBruto || cobroNeto + anulaciones || 1;
+  const pctAnul = anulaciones / total;
+
+  let displayCobroNeto = cobroNeto;
+  let displayAnulaciones = anulaciones;
+
+  if (anulaciones > 0 && pctAnul < MIN_VISIBLE_PCT) {
+    displayAnulaciones = total * MIN_VISIBLE_PCT;
+    displayCobroNeto = total - displayAnulaciones;
+  }
+
   const pieData: ComposicionCobrosPieItem[] = [
-    { name: "Cobro neto", value: cobroNeto, fill: "var(--palette-6)" },
-    { name: "Anulaciones", value: anulaciones, fill: "var(--chart-5)" },
+    { name: "Cobro neto", value: displayCobroNeto, fill: "var(--palette-6)" },
+    {
+      name: "Anulaciones",
+      value: displayAnulaciones,
+      fill: "var(--chart-5)",
+      ...(displayAnulaciones !== anulaciones && { actualValue: anulaciones }),
+    },
   ].filter((d) => d.value > 0);
 
   const emptyData = pieData.length === 0;

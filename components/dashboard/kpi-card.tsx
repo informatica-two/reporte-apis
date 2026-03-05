@@ -48,15 +48,15 @@ function KpiCard({
       <CardContent
         className={cn(
           "flex items-center gap-2",
-          size === "lg" && "p-4 gap-3",
-          size === "default" && "p-3",
-          size === "compact" && "p-2 gap-2"
+          size === "lg" && "p-5 gap-3",
+          size === "default" && "p-4 gap-3",
+          size === "compact" && "p-3 gap-2"
         )}
       >
         <div
           className={cn(
             "rounded-md transition-colors shrink-0 group-hover:opacity-90",
-            size === "compact" ? "p-1.5" : "p-2"
+            size === "compact" ? "p-2" : "p-2.5"
           )}
           style={{
             backgroundColor: `color-mix(in srgb, ${color} 20%, transparent)`,
@@ -65,9 +65,9 @@ function KpiCard({
         >
           <Icon
             className={cn(
-              size === "lg" && "size-5",
-              size === "default" && "size-4",
-              size === "compact" && "size-3.5"
+              size === "lg" && "size-6",
+              size === "default" && "size-5",
+              size === "compact" && "size-4"
             )}
           />
         </div>
@@ -75,17 +75,17 @@ function KpiCard({
           <p
             className={cn(
               "font-medium text-muted-foreground",
-              size === "compact" ? "text-[11px]" : "text-xs"
+              size === "compact" ? "text-xs" : "text-sm"
             )}
           >
             {title}
           </p>
           <p
             className={cn(
-              "mt-0.5 font-bold tabular-nums",
-              size === "lg" && "text-2xl",
-              size === "default" && "text-xl",
-              size === "compact" && "text-base"
+              "mt-1 font-bold tabular-nums",
+              size === "lg" && "text-3xl",
+              size === "default" && "text-2xl",
+              size === "compact" && "text-lg"
             )}
           >
             {value}

@@ -23,9 +23,9 @@ export function DashboardPage() {
           <p className="text-destructive py-8 text-center">{error}</p>
         )}
         {state === "success" && kpis && (
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-5">
             <KpiCards kpis={kpis} />
-            <div className="grid items-stretch gap-4 lg:grid-cols-3">
+            <div className="grid items-stretch gap-5 lg:grid-cols-3">
               <VentasVsCobrosChart kpis={kpis} />
               <DesgloseVentasWaterfall kpis={kpis} />
               <ComposicionCobrosChart kpis={kpis} />

@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Cell, Pie, PieChart } from "recharts";
+import type { PieLabelRenderProps } from "recharts";
 import { formatMoney } from "@/lib/utils";
 import { getComposicionVentasData } from "@/lib/charts/composicion-ventas";
 import type { ReporteKpis } from "@/hooks/use-reporte-data";
@@ -34,11 +35,43 @@ type DesgloseVentasWaterfallProps = {
   kpis: ReporteKpis;
 };
 
+const CENTER_LABEL_LINE_HEIGHT = 12;
+
+function renderCenterLabel(pct: number, label: string, fillClass: string) {
+  return function CenterLabel(props: PieLabelRenderProps) {
+    const { cx, cy, index } = props;
+    if (cx == null || cy == null || index !== 0) return null;
+    const cxy = Number(cy);
+    return (
+      <g>
+        <text
+          x={cx}
+          y={cxy - CENTER_LABEL_LINE_HEIGHT / 2}
+          textAnchor="middle"
+          dominantBaseline="central"
+          className={`font-mono text-lg font-semibold tabular-nums ${fillClass}`}
+        >
+          {pct.toFixed(1)}%
+        </text>
+        <text
+          x={cx}
+          y={cxy + CENTER_LABEL_LINE_HEIGHT / 2}
+          textAnchor="middle"
+          dominantBaseline="central"
+          className="text-[10px]"
+          style={{ fill: "var(--muted-foreground)" }}
+        >
+          {label}
+        </text>
+      </g>
+    );
+  };
+}
+
 export function DesgloseVentasWaterfall({ kpis }: DesgloseVentasWaterfallProps) {
   const {
     displayData,
     emptyData,
-    ventaBruta,
     ventaNeta,
     devoluciones,
     pctDevoluciones,
@@ -54,39 +87,44 @@ export function DesgloseVentasWaterfall({ kpis }: DesgloseVentasWaterfallProps) 
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-3 px-4 pt-0">
-        <ChartContainer config={chartConfig} className="h-[180px] w-full shrink-0">
-          <PieChart>
-            <ChartTooltip
-              content={
-                <ChartTooltipContent
-                  formatter={(value) => formatMoney(Number(value))}
-                />
-              }
-            />
-            <Pie
-              data={displayData}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              innerRadius={60}
-              outerRadius={90}
-              paddingAngle={emptyData ? 0 : 2}
-              stroke="var(--background)"
-              strokeWidth={2}
-            >
-              {displayData.map((entry, i) => (
-                <Cell key={i} fill={entry.fill} />
-              ))}
-            </Pie>
-          </PieChart>
-        </ChartContainer>
-
-        <div className="flex flex-col items-center gap-0.5 text-center">
-          <span className="text-[10px] text-muted-foreground">Venta bruta</span>
-          <span className="font-mono text-sm font-semibold">
-            {formatMoney(ventaBruta)}
-          </span>
+        <div className="relative h-[180px] w-full shrink-0">
+          <ChartContainer config={chartConfig} className="h-full w-full">
+            <PieChart>
+              <ChartTooltip
+                content={
+                  <ChartTooltipContent
+                    formatter={(value) => formatMoney(Number(value))}
+                  />
+                }
+              />
+              <Pie
+                data={displayData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={90}
+                paddingAngle={emptyData ? 0 : 2}
+                stroke="var(--background)"
+                strokeWidth={2}
+                label={
+                  !emptyData
+                    ? renderCenterLabel(
+                        pctDevoluciones,
+                        "devoluciones",
+                        "fill-chart-2"
+                      )
+                    : false
+                }
+                labelLine={false}
+              >
+                {displayData.map((entry, i) => (
+                  <Cell key={i} fill={entry.fill} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ChartContainer>
         </div>
 
         <div className="rounded-lg border border-border/60 bg-muted/40 p-2.5">

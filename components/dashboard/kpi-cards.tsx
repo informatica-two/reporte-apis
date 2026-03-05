@@ -76,9 +76,9 @@ type KpiCardsProps = {
 
 export function KpiCards({ kpis }: KpiCardsProps) {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-5">
       {/* Fila 1 — Estratégicos */}
-      <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-5 grid-cols-2 lg:grid-cols-4">
         {ROW1_ESTRATEGICOS.map(({ key, title, icon, format, description }, i) => (
           <KpiCard
             key={key}
@@ -92,7 +92,7 @@ export function KpiCards({ kpis }: KpiCardsProps) {
         ))}
       </div>
       {/* Fila 2 — Productividad */}
-      <div className="grid gap-2 grid-cols-1 sm:grid-cols-3">
+      <div className="grid gap-5 grid-cols-1 sm:grid-cols-3">
         {ROW2_PRODUCTIVIDAD.map(({ key, title, icon, format, description }, i) => (
           <KpiCard
             key={key}
