@@ -118,6 +118,47 @@
   --sidebar-ring: color-mix(in srgb, var(--palette-0) 25%, transparent);
 }
 
+.dark {
+  --palette-neutral: #0d0406;
+  --palette-muted: #1f0b0e;
+  --palette-muted-fg: #c4909a;
+
+  --background: #0d0406;
+  --foreground: #f5e6e8;
+  --card: #1a0a0f;
+  --card-foreground: #f5e6e8;
+  --popover: #1a0a0f;
+  --popover-foreground: #f5e6e8;
+  --primary: var(--palette-1);
+  --primary-foreground: #f5e6e8;
+  --secondary: #1f0b0e;
+  --secondary-foreground: #f5e6e8;
+  --muted: #1f0b0e;
+  --muted-foreground: #c4909a;
+  --accent: #1f0b0e;
+  --accent-foreground: #f5e6e8;
+  --destructive: var(--palette-2);
+  --border: color-mix(in srgb, #f5e6e8 10%, transparent);
+  --input: color-mix(in srgb, #f5e6e8 8%, transparent);
+  --ring: color-mix(in srgb, var(--palette-1) 50%, transparent);
+
+  --sidebar: #1a0a0f;
+  --sidebar-foreground: #f5e6e8;
+  --sidebar-primary: var(--palette-1);
+  --sidebar-primary-foreground: #f5e6e8;
+  --sidebar-accent: #1f0b0e;
+  --sidebar-accent-foreground: #f5e6e8;
+  --sidebar-border: color-mix(in srgb, #f5e6e8 10%, transparent);
+  --sidebar-ring: color-mix(in srgb, var(--palette-1) 50%, transparent);
+}
+
+@media print {
+  header { display: none !important; }
+  .no-print { display: none !important; }
+  body { background: white !important; color: black !important; }
+  main { padding: 0 !important; }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

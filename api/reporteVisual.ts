@@ -13,7 +13,8 @@ import { validateFechasParams } from "./types";
 /** Usa el proxy de Next.js en el navegador para evitar CORS y exponer credenciales */
 async function fetchViaProxy<T>(
   endpoint: string,
-  params: FechasParams
+  params: FechasParams,
+  signal?: AbortSignal
 ): Promise<ApiResult<ReporteVisualResponse<T>>> {
   const formData = new FormData();
   formData.append("fecha_inicio", params.fecha_inicio);
@@ -22,6 +23,7 @@ async function fetchViaProxy<T>(
   const res = await fetch(`/api/reporte-visual/${endpoint}`, {
     method: "POST",
     body: formData,
+    signal,
   });
   const data = await res.json();
 
@@ -55,7 +57,7 @@ function getEndpointName(path: string): string {
 
 function createReporteFetcher<T>(endpointPath: string) {
   const endpointName = getEndpointName(endpointPath);
-  return async (params: FechasParams) => {
+  return async (params: FechasParams, signal?: AbortSignal) => {
     const validation = validateFechasParams(params);
     if (!validation.valid) {
       return {
@@ -68,7 +70,7 @@ function createReporteFetcher<T>(endpointPath: string) {
     }
     // En el navegador usar proxy; en Node (scripts) usar API directa
     if (typeof window !== "undefined") {
-      return fetchViaProxy<T>(endpointName, params);
+      return fetchViaProxy<T>(endpointName, params, signal);
     }
     return apiPostFormData<ReporteVisualResponse<T>>(endpointPath, params);
   };

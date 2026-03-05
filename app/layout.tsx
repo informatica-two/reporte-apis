@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const lato = Lato({
@@ -25,7 +27,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="light" suppressHydrationWarning>
       <body className={`${lato.variable} font-sans antialiased`}>
-        {children}
+        <TooltipProvider>{children}</TooltipProvider>
+        <Toaster richColors position="bottom-right" />
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import {
   getActivos,
   getCobros,
@@ -35,37 +35,32 @@ export function useReporteData(fechas: FechasParams | null) {
   const [kpis, setKpis] = useState<ReporteKpis | null>(null);
   const [state, setState] = useState<LoadingState>("idle");
   const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const cache = useRef<Map<string, ReporteKpis>>(new Map());
 
-  const fetchData = useCallback(async (params: FechasParams) => {
+  const fetchData = useCallback(async (params: FechasParams, signal: AbortSignal) => {
+    const cacheKey = `${params.fecha_inicio}_${params.fecha_fin}`;
+    const cached = cache.current.get(cacheKey);
+    if (cached) {
+      setKpis(cached);
+      setState("success");
+      setLastUpdated(new Date());
+      return;
+    }
+
     setState("loading");
     setError(null);
-    const start = performance.now();
-    const timings: Record<string, number> = {};
 
     try {
       const [activosRes, cobrosRes, ventaRes, reclutamientosRes] =
         await Promise.all([
-          getActivos(params).then((r) => {
-            timings.activos = Math.round(performance.now() - start);
-            return r;
-          }),
-          getCobros(params).then((r) => {
-            timings.cobros = Math.round(performance.now() - start);
-            return r;
-          }),
-          getVenta(params).then((r) => {
-            timings.venta = Math.round(performance.now() - start);
-            return r;
-          }),
-          getReclutamientos(params).then((r) => {
-            timings.reclutamientos = Math.round(performance.now() - start);
-            return r;
-          }),
+          getActivos(params, signal),
+          getCobros(params, signal),
+          getVenta(params, signal),
+          getReclutamientos(params, signal),
         ]);
 
-      const totalMs = Math.round(performance.now() - start);
-      console.log("[Reporte] Tiempos por endpoint (ms):", timings);
-      console.log("[Reporte] Total:", totalMs, "ms");
+      if (signal.aborted) return;
 
       if (!activosRes.success) {
         setError(activosRes.error.message);
@@ -123,21 +118,36 @@ export function useReporteData(fechas: FechasParams | null) {
         reclutamientosDia: dias > 0 ? r / dias : 0,
         dias,
       };
+
+      cache.current.set(cacheKey, data);
       setKpis(data);
       setState("success");
+      setLastUpdated(new Date());
     } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") return;
       setError(e instanceof Error ? e.message : "Error al cargar datos");
       setState("error");
     }
   }, []);
 
   useEffect(() => {
-    if (fechas) fetchData(fechas);
-    else {
+    if (!fechas) {
       setKpis(null);
       setState("idle");
+      return;
     }
+    const controller = new AbortController();
+    fetchData(fechas, controller.signal);
+    return () => controller.abort();
   }, [fechas, fetchData]);
 
-  return { kpis, state, error };
+  const retry = useCallback(() => {
+    if (!fechas) return;
+    const cacheKey = `${fechas.fecha_inicio}_${fechas.fecha_fin}`;
+    cache.current.delete(cacheKey);
+    const controller = new AbortController();
+    fetchData(fechas, controller.signal);
+  }, [fechas, fetchData]);
+
+  return { kpis, state, error, retry, lastUpdated };
 }
