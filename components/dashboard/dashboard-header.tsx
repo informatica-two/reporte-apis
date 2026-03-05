@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import Image from "next/image";
+import { useTheme } from "next-themes";
 import { useDateRange } from "@/hooks/use-date-range";
-import { useDarkMode } from "@/hooks/use-dark-mode";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { PeriodSelector } from "./period-selector";
 import { Button } from "@/components/ui/button";
@@ -48,7 +48,8 @@ export function DashboardHeader({ onDateChange, onRefresh, lastUpdated }: Dashbo
     onDateRangeChange,
   } = useDateRange(onDateChange);
 
-  const { dark, toggle } = useDarkMode();
+  const { resolvedTheme, setTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   const relativeTime = useRelativeTime(lastUpdated ?? null);
 
   return (
@@ -102,11 +103,11 @@ export function DashboardHeader({ onDateChange, onRefresh, lastUpdated }: Dashbo
           <Button
             variant="ghost"
             size="icon"
-            onClick={toggle}
-            title={dark ? "Modo claro" : "Modo oscuro"}
+            onClick={() => setTheme(isDark ? "light" : "dark")}
+            title={isDark ? "Modo claro" : "Modo oscuro"}
             className="h-8 w-8"
           >
-            {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </Button>
         </div>
       </div>
