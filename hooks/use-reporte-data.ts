@@ -5,9 +5,11 @@ import {
   getActivos,
   getCobros,
   getVenta,
+  getVentaDetalle1,
+  getVentaDetalle2,
   getReclutamientos,
 } from "@/api/reporteVisual";
-import type { FechasParams } from "@/api/types";
+import type { FechasParams, ReportePorZonaDetalle } from "@/api/types";
 import { parseNumberLabel } from "@/lib/utils";
 
 export type ReporteKpis = {
@@ -33,16 +35,31 @@ type LoadingState = "idle" | "loading" | "success" | "error";
 
 export function useReporteData(fechas: FechasParams | null) {
   const [kpis, setKpis] = useState<ReporteKpis | null>(null);
+  const [reportePorZona, setReportePorZona] =
+    useState<ReportePorZonaDetalle | null>(null);
+  const [reportePorImpulsadora, setReportePorImpulsadora] =
+    useState<ReportePorZonaDetalle | null>(null);
   const [state, setState] = useState<LoadingState>("idle");
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const cache = useRef<Map<string, ReporteKpis>>(new Map());
+  const cache = useRef<
+    Map<
+      string,
+      {
+        kpis: ReporteKpis;
+        reportePorZona: ReportePorZonaDetalle | null;
+        reportePorImpulsadora: ReportePorZonaDetalle | null;
+      }
+    >
+  >(new Map());
 
   const fetchData = useCallback(async (params: FechasParams, signal: AbortSignal) => {
     const cacheKey = `${params.fecha_inicio}_${params.fecha_fin}`;
     const cached = cache.current.get(cacheKey);
     if (cached) {
-      setKpis(cached);
+      setKpis(cached.kpis);
+      setReportePorZona(cached.reportePorZona);
+      setReportePorImpulsadora(cached.reportePorImpulsadora);
       setState("success");
       setLastUpdated(new Date());
       return;
@@ -52,13 +69,21 @@ export function useReporteData(fechas: FechasParams | null) {
     setError(null);
 
     try {
-      const [activosRes, cobrosRes, ventaRes, reclutamientosRes] =
-        await Promise.all([
-          getActivos(params, signal),
-          getCobros(params, signal),
-          getVenta(params, signal),
-          getReclutamientos(params, signal),
-        ]);
+      const [
+        activosRes,
+        cobrosRes,
+        ventaRes,
+        ventaDetalle1Res,
+        ventaDetalle2Res,
+        reclutamientosRes,
+      ] = await Promise.all([
+        getActivos(params, signal),
+        getCobros(params, signal),
+        getVenta(params, signal),
+        getVentaDetalle1(params, signal),
+        getVentaDetalle2(params, signal),
+        getReclutamientos(params, signal),
+      ]);
 
       if (signal.aborted) return;
 
@@ -82,6 +107,26 @@ export function useReporteData(fechas: FechasParams | null) {
         setState("error");
         return;
       }
+
+      const ventaPorZonaDetalle =
+        ventaDetalle1Res.success && "data" in ventaDetalle1Res
+          ? ventaDetalle1Res.data.detalle
+          : null;
+      const reportePorZonaData =
+        ventaPorZonaDetalle &&
+        Array.isArray(ventaPorZonaDetalle.datos)
+          ? ventaPorZonaDetalle
+          : null;
+
+      const ventaPorImpulsadoraDetalle =
+        ventaDetalle2Res.success && "data" in ventaDetalle2Res
+          ? ventaDetalle2Res.data.detalle
+          : null;
+      const reportePorImpulsadoraData =
+        ventaPorImpulsadoraDetalle &&
+        Array.isArray(ventaPorImpulsadoraDetalle.datos)
+          ? ventaPorImpulsadoraDetalle
+          : null;
 
       const a = "data" in activosRes ? activosRes.data.detalle : null;
       const c = "data" in cobrosRes ? cobrosRes.data.detalle : null;
@@ -119,8 +164,14 @@ export function useReporteData(fechas: FechasParams | null) {
         dias,
       };
 
-      cache.current.set(cacheKey, data);
+      cache.current.set(cacheKey, {
+        kpis: data,
+        reportePorZona: reportePorZonaData,
+        reportePorImpulsadora: reportePorImpulsadoraData,
+      });
       setKpis(data);
+      setReportePorZona(reportePorZonaData);
+      setReportePorImpulsadora(reportePorImpulsadoraData);
       setState("success");
       setLastUpdated(new Date());
     } catch (e) {
@@ -133,6 +184,8 @@ export function useReporteData(fechas: FechasParams | null) {
   useEffect(() => {
     if (!fechas) {
       setKpis(null);
+      setReportePorZona(null);
+      setReportePorImpulsadora(null);
       setState("idle");
       return;
     }
@@ -149,5 +202,13 @@ export function useReporteData(fechas: FechasParams | null) {
     fetchData(fechas, controller.signal);
   }, [fechas, fetchData]);
 
-  return { kpis, state, error, retry, lastUpdated };
+  return {
+    kpis,
+    reportePorZona,
+    reportePorImpulsadora,
+    state,
+    error,
+    retry,
+    lastUpdated,
+  };
 }

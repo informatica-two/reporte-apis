@@ -8,6 +8,8 @@ import { VentasVsCobrosChart } from "./charts/ventas-vs-cobros-chart";
 import { DesgloseVentasWaterfall } from "./charts/desglose-ventas-waterfall";
 import { ComposicionCobrosChart } from "./charts/composicion-cobros-chart";
 import { ReclutamientosCard } from "./charts/reclutamientos-card";
+import { ReportePorZonaCard } from "./charts/reporte-por-zona-card";
+import { ReportePorImpulsadoraCard } from "./charts/reporte-por-impulsadora-card";
 import { ExportExcelButton } from "./export-excel-button";
 import { useReporteData } from "@/hooks/use-reporte-data";
 import type { FechasParams } from "@/api/types";
@@ -16,7 +18,8 @@ import { RefreshCw } from "lucide-react";
 
 export function DashboardPage() {
   const [fechas, setFechas] = React.useState<FechasParams | null>(null);
-  const { kpis, state, error, retry, lastUpdated } = useReporteData(fechas);
+  const { kpis, reportePorZona, reportePorImpulsadora, state, error, retry, lastUpdated } =
+    useReporteData(fechas);
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -47,6 +50,10 @@ export function DashboardPage() {
               <DesgloseVentasWaterfall kpis={kpis} />
               <ComposicionCobrosChart kpis={kpis} />
               <ReclutamientosCard kpis={kpis} />
+            </div>
+            <div className="grid items-stretch gap-5 lg:grid-cols-2">
+              <ReportePorZonaCard reportePorZona={reportePorZona} />
+              <ReportePorImpulsadoraCard reportePorImpulsadora={reportePorImpulsadora} />
             </div>
           </div>
         )}

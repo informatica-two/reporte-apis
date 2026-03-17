@@ -3,6 +3,8 @@ export {
   getActivos,
   getCobros,
   getVenta,
+  getVentaDetalle1,
+  getVentaDetalle2,
   getReclutamientos,
 } from "./reporteVisual";
 export type {

@@ -64,6 +64,35 @@ function ReclutamientosCardSkeleton() {
   );
 }
 
+/** Skeleton para Reporte por zona / Reporte por impulsadora (barras + tabla). */
+function ReporteBarrasCardSkeleton() {
+  return (
+    <Card className="flex h-full flex-col gap-3 overflow-hidden py-4">
+      <CardHeader className="px-4 pb-2">
+        <Skeleton className="h-4 w-40" />
+        <Skeleton className="mt-1 h-3 w-56" />
+      </CardHeader>
+      <CardContent className="flex flex-1 flex-col gap-4 px-4 pt-0">
+        <Skeleton className="h-[280px] w-full shrink-0 rounded-lg" />
+        <div className="rounded-lg border border-border/60 bg-muted/40 overflow-hidden">
+          <div className="border-b border-border/60 bg-muted/80 px-3 py-2 flex gap-2">
+            <Skeleton className="h-3 w-12" />
+            <Skeleton className="h-3 w-14 ml-auto" />
+          </div>
+          <div className="p-2 space-y-1.5">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="flex items-center justify-between gap-2">
+                <Skeleton className="h-3.5 w-16" />
+                <Skeleton className="h-3.5 w-20" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 /** Skeleton del contenido (export + KPI cards + charts). Coincide con el layout real. */
 export function DashboardSkeleton() {
   return (
@@ -109,6 +138,12 @@ export function DashboardSkeleton() {
           <ChartCardSkeleton key={i} />
         ))}
         <ReclutamientosCardSkeleton />
+      </div>
+
+      {/* Reporte por zona / Reporte por impulsadora skeletons */}
+      <div className="grid items-stretch gap-5 lg:grid-cols-2">
+        <ReporteBarrasCardSkeleton />
+        <ReporteBarrasCardSkeleton />
       </div>
     </div>
   );

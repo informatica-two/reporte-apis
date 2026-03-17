@@ -110,3 +110,16 @@ export type VentaDetalle = {
   venta_neta_label: string;
   meta_ventas_label: string;
 };
+
+/** Un dato del reporte por zona (venta/detalle_1) */
+export type ReportePorZonaDato = {
+  Etiqueta: string;
+  Valor: string;
+};
+
+/** Detalle del endpoint venta/detalle_1 — REPORTE POR ZONA */
+export type ReportePorZonaDetalle = {
+  titulo_reporte: string;
+  datos: ReportePorZonaDato[];
+};
+

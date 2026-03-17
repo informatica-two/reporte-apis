@@ -23,6 +23,8 @@ const ENDPOINTS = [
   { name: "activos", path: "/reporte_visual/activos" },
   { name: "cobros", path: "/reporte_visual/cobros" },
   { name: "venta", path: "/reporte_visual/venta" },
+  { name: "venta/detalle_1 (reporte por zona)", path: "/reporte_visual/venta/detalle_1" },
+  { name: "venta/detalle_2 (reporte por impulsadora)", path: "/reporte_visual/venta/detalle_2" },
   { name: "reclutamientos", path: "/reporte_visual/reclutamientos" },
 ];
 

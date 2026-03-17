@@ -6,6 +6,7 @@ import type {
   ActivosDetalle,
   CobrosDetalle,
   VentaDetalle,
+  ReportePorZonaDetalle,
 } from "./types";
 import type { ApiResult } from "./types";
 import { validateFechasParams } from "./types";
@@ -101,3 +102,21 @@ export const getVenta =
 export const getReclutamientos = createReporteFetcher<number>(
   API_ENDPOINTS.reporteVisual.reclutamientos
 );
+
+/**
+ * Obtiene el reporte por zona (venta/detalle_1) para el rango de fechas indicado.
+ * Incluye titulo_reporte y datos con Etiqueta (zona) y Valor (monto).
+ */
+export const getVentaDetalle1 =
+  createReporteFetcher<ReportePorZonaDetalle>(
+    API_ENDPOINTS.reporteVisual.ventaDetalle1
+  );
+
+/**
+ * Obtiene el reporte por impulsadora (venta/detalle_2) para el rango de fechas indicado.
+ * Misma estructura que detalle_1: titulo_reporte y datos (Etiqueta, Valor).
+ */
+export const getVentaDetalle2 =
+  createReporteFetcher<ReportePorZonaDetalle>(
+    API_ENDPOINTS.reporteVisual.ventaDetalle2
+  );
