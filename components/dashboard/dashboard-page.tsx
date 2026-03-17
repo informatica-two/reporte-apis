@@ -21,7 +21,7 @@ import { RefreshCw } from "lucide-react";
 export function DashboardPage() {
   const [fechas, setFechas] = React.useState<FechasParams | null>(null);
   const [vistaActiva, setVistaActiva] = React.useState<VistaActiva>("principal");
-  const { kpis, state, error, retry, lastUpdated } = useReporteData(fechas);
+  const { kpis, reportePorZona, reportePorImpulsadora, state, error, retry, lastUpdated } = useReporteData(fechas);
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -56,6 +56,10 @@ export function DashboardPage() {
                   <DesgloseVentasWaterfall kpis={kpis} />
                   <ComposicionCobrosChart kpis={kpis} />
                   <ReclutamientosCard kpis={kpis} />
+                </div>
+                <div className="grid items-stretch gap-5 lg:grid-cols-2">
+                  <ReportePorZonaCard reportePorZona={reportePorZona} />
+                  <ReportePorImpulsadoraCard reportePorImpulsadora={reportePorImpulsadora} />
                 </div>
               </div>
             )}
