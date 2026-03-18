@@ -35,18 +35,29 @@ export async function apiPostFormData<T>(
   params: Record<string, string>
 ): Promise<ApiResult<T>> {
   try {
+    if (process.env.NODE_ENV === "development") {
+      console.log(`[API] 🌐 POST ${url}`, params);
+    }
+    const startTime = performance.now();
+    
     const formData = new FormData();
     for (const [key, value] of Object.entries(params)) {
       formData.append(key, value);
     }
     const response = await vogueApi.post<T>(url, formData);
+    
+    const duration = Math.round(performance.now() - startTime);
+    if (process.env.NODE_ENV === "development") {
+      console.log(`[API] ✅ ${url} completed in ${duration}ms`);
+    }
+    
     return { success: true, data: response.data };
   } catch (error) {
     const apiError = normalizeError(error);
     if (process.env.NODE_ENV === "development") {
       const err = error as { response?: { status?: number; data?: unknown } };
       console.error(
-        `[API Error] ${url}:`,
+        `[API Error] ❌ ${url}:`,
         apiError.message,
         apiError.statusCode ?? err.response?.status,
         err.response?.data

@@ -1,6 +1,9 @@
 "use client";
 
 import * as React from "react";
+import { useReporteData } from "@/hooks/use-reporte-data";
+import type { ReporteKpis } from "@/hooks/use-reporte-data";
+import type { FechasParams } from "@/api/types";
 import { DashboardHeader } from "./dashboard-header";
 import { DashboardSkeleton } from "./dashboard-skeleton";
 import { KpiCards } from "./kpis/kpi-cards";
@@ -8,32 +11,39 @@ import { VentasVsCobrosChart } from "./charts/ventas-vs-cobros-chart";
 import { DesgloseVentasWaterfall } from "./charts/desglose-ventas-waterfall";
 import { ComposicionCobrosChart } from "./charts/composicion-cobros-chart";
 import { ReclutamientosCard } from "./charts/reclutamientos-card";
-import { ReportePorZonaCard } from "./charts/reporte-por-zona-card";
-import { ReportePorImpulsadoraCard } from "./charts/reporte-por-impulsadora-card";
 import { ExportExcelButton } from "./export-excel-button";
-import { useReporteData } from "@/hooks/use-reporte-data";
-import type { FechasParams } from "@/api/types";
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
 
-export function DashboardPage() {
-  const [fechas, setFechas] = React.useState<FechasParams | null>(null);
-  const { kpis, reportePorZona, reportePorImpulsadora, state, error, retry, lastUpdated } =
-    useReporteData(fechas);
+type DashboardContentProps = {
+  initialKpis: ReporteKpis | null;
+  initialFechas: FechasParams;
+  initialError: string | null;
+};
+
+export function DashboardContent({
+  initialKpis,
+  initialFechas,
+  initialError,
+}: DashboardContentProps) {
+  const [fechas, setFechas] = React.useState<FechasParams | null>(
+    initialFechas,
+  );
+  const { kpis, state, error, retry } = useReporteData(fechas, {
+    initialData: initialKpis,
+  });
+
+  const displayError = error ?? initialError;
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <DashboardHeader
-        onDateChange={setFechas}
-        onRefresh={retry}
-        lastUpdated={lastUpdated}
-      />
-      <main className="flex-1 p-6">
+    <>
+      <DashboardHeader onDateChange={setFechas} onRefresh={() => retry()} />
+      <div className="flex-1 p-6">
         {(state === "idle" || state === "loading") && <DashboardSkeleton />}
-        {state === "error" && (
+        {state === "error" && displayError && (
           <div className="flex flex-col items-center gap-4 py-16 text-center">
-            <p className="text-destructive">{error}</p>
-            <Button variant="outline" size="sm" onClick={retry}>
+            <p className="text-destructive">{displayError}</p>
+            <Button variant="outline" size="sm" onClick={() => retry()}>
               <RefreshCw className="mr-2 h-4 w-4" />
               Reintentar
             </Button>
@@ -51,13 +61,9 @@ export function DashboardPage() {
               <ComposicionCobrosChart kpis={kpis} />
               <ReclutamientosCard kpis={kpis} />
             </div>
-            <div className="grid items-stretch gap-5 lg:grid-cols-2">
-              <ReportePorZonaCard reportePorZona={reportePorZona} />
-              <ReportePorImpulsadoraCard reportePorImpulsadora={reportePorImpulsadora} />
-            </div>
           </div>
         )}
-      </main>
-    </div>
+      </div>
+    </>
   );
 }

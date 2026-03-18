@@ -23,6 +23,14 @@ export function formatNumber(n: number): string {
   })
 }
 
+/** Formato porcentaje: 25.5% (1 decimal) */
+export function formatPercent(n: number): string {
+  return n.toLocaleString("en-US", {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }) + "%"
+}
+
 /** Parsea label de la API (ej: "1,234" o "$1.234") a número */
 export function parseNumberLabel(label: string | undefined): number {
   if (label == null || typeof label !== "string") return 0;

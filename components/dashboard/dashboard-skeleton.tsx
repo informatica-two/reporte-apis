@@ -139,12 +139,6 @@ export function DashboardSkeleton() {
         ))}
         <ReclutamientosCardSkeleton />
       </div>
-
-      {/* Reporte por zona / Reporte por impulsadora skeletons */}
-      <div className="grid items-stretch gap-5 lg:grid-cols-2">
-        <ReporteBarrasCardSkeleton />
-        <ReporteBarrasCardSkeleton />
-      </div>
     </div>
   );
 }

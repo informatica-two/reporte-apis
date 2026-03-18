@@ -11,10 +11,20 @@ export const API_CONFIG = {
 export const API_ENDPOINTS = {
   reporteVisual: {
     activos: "/reporte_visual/activos",
+    activosDetalle1: "/reporte_visual/activos/detalle_1",
+    activosDetalle2: "/reporte_visual/activos/detalle_2",
+    activosDetalle3: "/reporte_visual/activos/detalle_3",
+    activosDetalle4: "/reporte_visual/activos/detalle_4",
     cobros: "/reporte_visual/cobros",
+    cobrosDetalle1: "/reporte_visual/cobros/detalle_1",
+    cobrosDetalle2: "/reporte_visual/cobros/detalle_2",
+    cobrosDetalle3: "/reporte_visual/cobros/detalle_3",
+    cobrosDetalle4: "/reporte_visual/cobros/detalle_4",
     venta: "/reporte_visual/venta",
     ventaDetalle1: "/reporte_visual/venta/detalle_1",
     ventaDetalle2: "/reporte_visual/venta/detalle_2",
+    ventaDetalle3: "/reporte_visual/venta/detalle_3",
+    ventaDetalle4: "/reporte_visual/venta/detalle_4",
     reclutamientos: "/reporte_visual/reclutamientos",
   },
 } as const;

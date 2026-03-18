@@ -10,35 +10,15 @@ import { Button } from "@/components/ui/button";
 import { Moon, Sun, RefreshCw } from "lucide-react";
 import type { FechasParams } from "@/api/types";
 
-function useRelativeTime(date: Date | null): string {
-  const [label, setLabel] = React.useState("");
-
-  React.useEffect(() => {
-    if (!date) { setLabel(""); return; }
-
-    const update = () => {
-      const diffMs = Date.now() - date.getTime();
-      const diffMin = Math.floor(diffMs / 60_000);
-      if (diffMin < 1) setLabel("Actualizado ahora");
-      else if (diffMin === 1) setLabel("Actualizado hace 1 min");
-      else setLabel(`Actualizado hace ${diffMin} min`);
-    };
-
-    update();
-    const id = setInterval(update, 30_000);
-    return () => clearInterval(id);
-  }, [date]);
-
-  return label;
-}
-
 export type DashboardHeaderProps = {
   onDateChange?: (params: FechasParams) => void;
   onRefresh?: () => void;
-  lastUpdated?: Date | null;
 };
 
-export function DashboardHeader({ onDateChange, onRefresh, lastUpdated }: DashboardHeaderProps) {
+export function DashboardHeader({
+  onDateChange,
+  onRefresh,
+}: DashboardHeaderProps) {
   const {
     period,
     dateRange,
@@ -50,7 +30,6 @@ export function DashboardHeader({ onDateChange, onRefresh, lastUpdated }: Dashbo
 
   const { resolvedTheme, setTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
-  const relativeTime = useRelativeTime(lastUpdated ?? null);
 
   return (
     <header className="flex flex-col gap-4 border-b border-border bg-card px-5 py-5 md:flex-row md:items-center md:justify-between">
@@ -68,9 +47,6 @@ export function DashboardHeader({ onDateChange, onRefresh, lastUpdated }: Dashbo
           </h1>
           <p className="text-sm text-muted-foreground">
             Período: {periodLabel}
-            {relativeTime && (
-              <span className="ml-3 text-xs opacity-60">{relativeTime}</span>
-            )}
           </p>
         </div>
       </div>
@@ -107,7 +83,11 @@ export function DashboardHeader({ onDateChange, onRefresh, lastUpdated }: Dashbo
             title={isDark ? "Modo claro" : "Modo oscuro"}
             className="h-8 w-8"
           >
-            {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            {isDark ? (
+              <Sun className="h-4 w-4" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
           </Button>
         </div>
       </div>

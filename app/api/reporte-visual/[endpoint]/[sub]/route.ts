@@ -4,8 +4,18 @@ const BASE_URL =
   process.env.VOGUE_API_BASE_URL ?? "https://mivogue.com:83/APIs";
 
 const VALID_SUB_ENDPOINTS: [string, string][] = [
+  ["activos", "detalle_1"],
+  ["activos", "detalle_2"],
+  ["activos", "detalle_3"],
+  ["activos", "detalle_4"],
+  ["cobros", "detalle_1"],
+  ["cobros", "detalle_2"],
+  ["cobros", "detalle_3"],
+  ["cobros", "detalle_4"],
   ["venta", "detalle_1"],
   ["venta", "detalle_2"],
+  ["venta", "detalle_3"],
+  ["venta", "detalle_4"],
 ];
 
 export async function POST(

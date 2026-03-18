@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  reactStrictMode: false,
   async headers() {
     const allowedOrigins =
       process.env.IFRAME_ALLOWED_ORIGINS ||

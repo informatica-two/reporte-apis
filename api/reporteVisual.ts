@@ -17,13 +17,15 @@ async function fetchViaProxy<T>(
   params: FechasParams,
   signal?: AbortSignal
 ): Promise<ApiResult<ReporteVisualResponse<T>>> {
-  const formData = new FormData();
-  formData.append("fecha_inicio", params.fecha_inicio);
-  formData.append("fecha_fin", params.fecha_fin);
-
   const res = await fetch(`/api/reporte-visual/${endpoint}`, {
     method: "POST",
-    body: formData,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      fecha_inicio: params.fecha_inicio,
+      fecha_fin: params.fecha_fin,
+    }),
     signal,
   });
   const data = await res.json();
@@ -119,4 +121,94 @@ export const getVentaDetalle1 =
 export const getVentaDetalle2 =
   createReporteFetcher<ReportePorZonaDetalle>(
     API_ENDPOINTS.reporteVisual.ventaDetalle2
+  );
+
+/**
+ * Obtiene el reporte detalle_3 para el rango de fechas indicado.
+ * Misma estructura: titulo_reporte y datos (Etiqueta, Valor).
+ */
+export const getVentaDetalle3 =
+  createReporteFetcher<ReportePorZonaDetalle>(
+    API_ENDPOINTS.reporteVisual.ventaDetalle3
+  );
+
+/**
+ * Obtiene el reporte por tipo de crédito (venta/detalle_4) para el rango de fechas indicado.
+ * Misma estructura: titulo_reporte y datos (Etiqueta, Valor).
+ */
+export const getVentaDetalle4 =
+  createReporteFetcher<ReportePorZonaDetalle>(
+    API_ENDPOINTS.reporteVisual.ventaDetalle4
+  );
+
+/**
+ * Obtiene el reporte de cobros por medio (cobros/detalle_1) para el rango de fechas indicado.
+ * Incluye titulo_reporte y datos con Etiqueta (medio) y Valor (monto).
+ */
+export const getCobrosDetalle1 =
+  createReporteFetcher<ReportePorZonaDetalle>(
+    API_ENDPOINTS.reporteVisual.cobrosDetalle1
+  );
+
+/**
+ * Obtiene el reporte de cobros por tipo documento (cobros/detalle_2) para el rango de fechas indicado.
+ * Misma estructura: titulo_reporte y datos (Etiqueta, Valor).
+ */
+export const getCobrosDetalle2 =
+  createReporteFetcher<ReportePorZonaDetalle>(
+    API_ENDPOINTS.reporteVisual.cobrosDetalle2
+  );
+
+/**
+ * Obtiene el reporte de cobros por municipio (cobros/detalle_3) para el rango de fechas indicado.
+ * Misma estructura: titulo_reporte y datos (Etiqueta, Valor).
+ */
+export const getCobrosDetalle3 =
+  createReporteFetcher<ReportePorZonaDetalle>(
+    API_ENDPOINTS.reporteVisual.cobrosDetalle3
+  );
+
+/**
+ * Obtiene el reporte de cobros por zona (cobros/detalle_4) para el rango de fechas indicado.
+ * Misma estructura: titulo_reporte y datos (Etiqueta, Valor).
+ */
+export const getCobrosDetalle4 =
+  createReporteFetcher<ReportePorZonaDetalle>(
+    API_ENDPOINTS.reporteVisual.cobrosDetalle4
+  );
+
+/**
+ * Obtiene el reporte de activos por zona (activos/detalle_1) para el rango de fechas indicado.
+ * Misma estructura: titulo_reporte y datos (Etiqueta, Valor).
+ */
+export const getActivosDetalle1 =
+  createReporteFetcher<ReportePorZonaDetalle>(
+    API_ENDPOINTS.reporteVisual.activosDetalle1
+  );
+
+/**
+ * Obtiene el reporte de activos por tipo de crédito (activos/detalle_2) para el rango de fechas indicado.
+ * Misma estructura: titulo_reporte y datos (Etiqueta, Valor).
+ */
+export const getActivosDetalle2 =
+  createReporteFetcher<ReportePorZonaDetalle>(
+    API_ENDPOINTS.reporteVisual.activosDetalle2
+  );
+
+/**
+ * Obtiene el reporte de activos por rango (activos/detalle_3) para el rango de fechas indicado.
+ * Misma estructura: titulo_reporte y datos (Etiqueta, Valor).
+ */
+export const getActivosDetalle3 =
+  createReporteFetcher<ReportePorZonaDetalle>(
+    API_ENDPOINTS.reporteVisual.activosDetalle3
+  );
+
+/**
+ * Obtiene el reporte de activos por año (activos/detalle_4) para el rango de fechas indicado.
+ * Misma estructura: titulo_reporte y datos (Etiqueta, Valor).
+ */
+export const getActivosDetalle4 =
+  createReporteFetcher<ReportePorZonaDetalle>(
+    API_ENDPOINTS.reporteVisual.activosDetalle4
   );

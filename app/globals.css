@@ -62,24 +62,24 @@
   --radius: 0.625rem;
 
   /* Paleta oficial Vogue */
-  --palette-0: #9C182F; /* rojo vino - principal */
-  --palette-1: #C25575; /* mauve */
-  --palette-2: #EA5978; /* rosa vibrante */
-  --palette-3: #F08DA6; /* rosa suave */
-  --palette-4: #DA9189; /* rosa beige */
-  --palette-5: #E3B9B3; /* beige claro */
-  --palette-6: #CB998D; /* taupe */
-  --palette-7: #FFA489; /* durazno */
-  --palette-8: #9C182F; /* acento (igual que 0) */
-  --palette-9: #C25575; /* acento (igual que 1) */
+  --palette-0: #9c182f; /* rojo vino - principal */
+  --palette-1: #c25575; /* mauve */
+  --palette-2: #ea5978; /* rosa vibrante */
+  --palette-3: #f08da6; /* rosa suave */
+  --palette-4: #da9189; /* rosa beige */
+  --palette-5: #e3b9b3; /* beige claro */
+  --palette-6: #cb998d; /* taupe */
+  --palette-7: #ffa489; /* durazno */
+  --palette-8: #9c182f; /* acento (igual que 0) */
+  --palette-9: #c25575; /* acento (igual que 1) */
   --palette-neutral: #ffffff;
   --palette-muted: #faf5f4;
   --palette-muted-fg: #6b5b58;
 
   /* Secundarios (oficial - por línea) */
-  --palette-secondary-blue: #AECDF4;   /* azul cielo - Higiene, Capilar, Skin, Bienestar, Perfumería */
-  --palette-secondary-green: #B3DFA4; /* verde pastel - Capilar, Bienestar */
-  --palette-secondary-orange: #FFC2A5; /* naranja pastel - Higiene, Capilar, Skin Care */
+  --palette-secondary-blue: #aecdf4; /* azul cielo - Higiene, Capilar, Skin, Bienestar, Perfumería */
+  --palette-secondary-green: #b3dfa4; /* verde pastel - Capilar, Bienestar */
+  --palette-secondary-orange: #ffc2a5; /* naranja pastel - Higiene, Capilar, Skin Care */
 
   /* Semanticas */
   --background: var(--palette-neutral);
@@ -153,10 +153,46 @@
 }
 
 @media print {
-  header { display: none !important; }
-  .no-print { display: none !important; }
-  body { background: white !important; color: black !important; }
-  main { padding: 0 !important; }
+  header {
+    display: none !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  main {
+    padding: 0 !important;
+  }
+}
+
+/* NProgress custom styles */
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  background: linear-gradient(90deg, #ec4899 0%, #f472b6 100%) !important;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px !important;
+  box-shadow: 0 0 10px #ec4899, 0 0 5px #f472b6 !important;
+}
+
+#nprogress .peg {
+  display: block;
+  position: absolute;
+  right: 0px;
+  width: 100px;
+  height: 100%;
+  box-shadow: 0 0 10px #ec4899, 0 0 5px #f472b6 !important;
+  opacity: 1;
+  transform: rotate(3deg) translate(0px, -4px);
 }
 
 @layer base {

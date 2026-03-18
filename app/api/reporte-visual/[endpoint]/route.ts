@@ -26,14 +26,27 @@ export async function POST(
   let fecha_fin: string;
 
   const contentType = request.headers.get("content-type") ?? "";
-  if (contentType.includes("multipart/form-data")) {
-    const formData = await request.formData();
-    fecha_inicio = (formData.get("fecha_inicio") as string) ?? "";
-    fecha_fin = (formData.get("fecha_fin") as string) ?? "";
-  } else {
-    const body = await request.json();
-    fecha_inicio = body.fecha_inicio ?? "";
-    fecha_fin = body.fecha_fin ?? "";
+  
+  try {
+    if (contentType.includes("application/json")) {
+      const body = await request.json();
+      fecha_inicio = body.fecha_inicio ?? "";
+      fecha_fin = body.fecha_fin ?? "";
+    } else if (contentType.includes("multipart/form-data")) {
+      const formData = await request.formData();
+      fecha_inicio = (formData.get("fecha_inicio") as string) ?? "";
+      fecha_fin = (formData.get("fecha_fin") as string) ?? "";
+    } else {
+      // Intenta JSON por defecto
+      const body = await request.json();
+      fecha_inicio = body.fecha_inicio ?? "";
+      fecha_fin = body.fecha_fin ?? "";
+    }
+  } catch (parseError) {
+    return NextResponse.json(
+      { success: false, detalle: "Error al parsear el body de la petición" },
+      { status: 400 }
+    );
   }
 
   if (!fecha_inicio || !fecha_fin) {

@@ -3,6 +3,7 @@ import { Lato } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
+import { QueryProvider } from "./providers";
 import "./globals.css";
 
 const lato = Lato({
@@ -28,10 +29,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${lato.variable} font-sans antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <TooltipProvider>{children}</TooltipProvider>
-          <Toaster richColors position="bottom-right" />
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <TooltipProvider>{children}</TooltipProvider>
+            <Toaster richColors position="bottom-right" />
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );
