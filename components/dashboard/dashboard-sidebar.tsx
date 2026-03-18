@@ -13,6 +13,7 @@ import {
   RefreshCw,
   Moon,
   Sun,
+  UserRoundPlus,
 } from "lucide-react";
 import {
   Tooltip,
@@ -30,11 +31,36 @@ type SidebarItem = {
 };
 
 const NAV_ITEMS: SidebarItem[] = [
-  { id: "home", label: "Inicio", href: "/", icon: <Home className="h-5 w-5" /> },
-  { id: "ventas", label: "Ventas", href: "/ventas", icon: <ShoppingCart className="h-5 w-5" /> },
-  { id: "cobros", label: "Cobros", href: "/cobros", icon: <HandCoins className="h-5 w-5" /> },
-  { id: "activos", label: "Activos", href: "/activos", icon: <LayoutDashboard className="h-5 w-5" /> },
-  { id: "reclutamientos", label: "Reclutamientos", href: "/#reclutamientos", icon: <Users className="h-5 w-5" /> },
+  {
+    id: "home",
+    label: "Inicio",
+    href: "/",
+    icon: <Home className="h-5 w-5" />,
+  },
+  {
+    id: "ventas",
+    label: "Ventas",
+    href: "/ventas",
+    icon: <ShoppingCart className="h-5 w-5" />,
+  },
+  {
+    id: "cobros",
+    label: "Cobros",
+    href: "/cobros",
+    icon: <HandCoins className="h-5 w-5" />,
+  },
+  {
+    id: "activos",
+    label: "Activos",
+    href: "/activos",
+    icon: <Users className="h-5 w-5" />,
+  },
+  {
+    id: "reclutamientos",
+    label: "Reclutamientos",
+    href: "/#reclutamientos",
+    icon: <UserRoundPlus className="h-5 w-5" />,
+  },
 ];
 
 function isActive(pathname: string, href: string): boolean {
@@ -57,7 +83,9 @@ export function DashboardSidebar({ onRefresh }: DashboardSidebarProps = {}) {
     if (item.href.startsWith("/#")) {
       const sectionId = item.href.slice(2);
       if (pathname === "/") {
-        document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        document
+          .getElementById(sectionId)
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
       } else {
         NProgress.start();
         router.push(item.href);
@@ -77,7 +105,7 @@ export function DashboardSidebar({ onRefresh }: DashboardSidebarProps = {}) {
           "flex h-10 w-10 items-center justify-center rounded-lg transition-colors",
           active
             ? "bg-primary/10 text-primary"
-            : "text-muted-foreground hover:bg-muted hover:text-foreground"
+            : "text-muted-foreground hover:bg-muted hover:text-foreground",
         );
         const isHash = item.href.startsWith("/#");
 
@@ -93,7 +121,11 @@ export function DashboardSidebar({ onRefresh }: DashboardSidebarProps = {}) {
                   {item.icon}
                 </button>
               ) : (
-                <Link href={item.href} className={classes} onClick={handleLinkClick}>
+                <Link
+                  href={item.href}
+                  className={classes}
+                  onClick={handleLinkClick}
+                >
                   {item.icon}
                 </Link>
               )}
@@ -114,7 +146,7 @@ export function DashboardSidebar({ onRefresh }: DashboardSidebarProps = {}) {
               "flex h-10 w-10 items-center justify-center rounded-lg transition-colors",
               pathname === "/personalizable"
                 ? "bg-primary/10 text-primary"
-                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground",
             )}
           >
             <LayoutDashboard className="h-5 w-5" />
