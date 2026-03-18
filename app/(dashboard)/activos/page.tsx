@@ -12,6 +12,7 @@ export default async function ActivosPage() {
       initialReportePorTipoCredito={reportePorTipoCredito}
       initialReportePorRango={reportePorRango}
       initialReportePorAnio={reportePorAnio}
+      initialActivosData={activosData}
       initialFechas={fechas}
       initialError={error}
     />
