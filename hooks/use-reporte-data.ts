@@ -32,6 +32,7 @@ export type ReporteKpis = {
 
 type UseReporteDataOptions = {
   initialData?: ReporteKpis | null;
+  initialDataUpdatedAt?: number;
 };
 
 async function fetchKpis(
@@ -66,20 +67,24 @@ export function useReporteData(
   fechas: FechasParams | null,
   options: UseReporteDataOptions = {},
 ) {
+  const queryKey = queryKeys.reporteKpis(fechas);
+  
   const query = useQuery({
-    queryKey: queryKeys.reporteKpis(fechas),
+    queryKey,
     queryFn: ({ signal }) => {
       if (!fechas) throw new Error("Fechas requeridas");
       return fetchKpis(fechas, signal);
     },
     enabled: !!fechas,
     initialData: options.initialData ?? undefined,
+    initialDataUpdatedAt: options.initialDataUpdatedAt,
     staleTime: 5 * 60 * 1000,
+    refetchOnMount: false,
   });
 
   return {
     kpis: query.data ?? null,
-    state: query.isLoading
+    state: query.isFetching || query.isLoading
       ? "loading"
       : query.isError
         ? "error"

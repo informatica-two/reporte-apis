@@ -32,12 +32,13 @@ function shouldLog(key: string): boolean {
 
 export function getDefaultFechas(): FechasParams {
   const now = new Date();
-  const thirtyDaysAgo = new Date(now);
-  thirtyDaysAgo.setDate(now.getDate() - 30);
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const thirtyDaysAgo = new Date(today);
+  thirtyDaysAgo.setDate(today.getDate() - 29);
 
   return {
     fecha_inicio: thirtyDaysAgo.toISOString().split("T")[0],
-    fecha_fin: now.toISOString().split("T")[0],
+    fecha_fin: today.toISOString().split("T")[0],
   };
 }
 

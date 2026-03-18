@@ -29,15 +29,27 @@ export function DashboardContent({
   const [fechas, setFechas] = React.useState<FechasParams | null>(
     initialFechas,
   );
+  
+  const initialDataTimestamp = React.useMemo(() => Date.now(), []);
+  
+  const handleDateChange = React.useCallback((newFechas: FechasParams) => {
+    setFechas(newFechas);
+  }, []);
+  
+  const isInitialFechas = 
+    fechas?.fecha_inicio === initialFechas.fecha_inicio &&
+    fechas?.fecha_fin === initialFechas.fecha_fin;
+  
   const { kpis, state, error, retry } = useReporteData(fechas, {
-    initialData: initialKpis,
+    initialData: isInitialFechas ? initialKpis : undefined,
+    initialDataUpdatedAt: isInitialFechas ? initialDataTimestamp : undefined,
   });
 
   const displayError = error ?? initialError;
 
   return (
     <>
-      <DashboardHeader onDateChange={setFechas} />
+      <DashboardHeader onDateChange={handleDateChange} />
       <div className="flex-1 p-6">
         {(state === "idle" || state === "loading") && <DashboardSkeleton />}
         {state === "error" && displayError && (
