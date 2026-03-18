@@ -1,3 +1,3 @@
 export { DashboardHeader } from "./dashboard-header";
-export { DashboardPage } from "./dashboard-page";
+export { DashboardSidebar } from "./dashboard-sidebar";
 export { PeriodSelector } from "./period-selector";
