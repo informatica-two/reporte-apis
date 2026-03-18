@@ -17,6 +17,7 @@ type UseVentaDetallesOptions = {
   initialReportePorImpulsadora?: ReportePorZonaDetalle | null;
   initialReporteDetalle3?: ReportePorZonaDetalle | null;
   initialReportePorTipoCredito?: ReportePorZonaDetalle | null;
+  initialDataUpdatedAt?: number;
 };
 
 async function fetchVentaDetalles(
@@ -91,7 +92,9 @@ export function useVentaDetalles(
     },
     enabled: !!fechas,
     initialData,
+    initialDataUpdatedAt: options.initialDataUpdatedAt,
     staleTime: 5 * 60 * 1000,
+    refetchOnMount: false,
   });
 
   return {
@@ -99,7 +102,7 @@ export function useVentaDetalles(
     reportePorImpulsadora: query.data?.reportePorImpulsadora ?? null,
     reporteDetalle3: query.data?.reporteDetalle3 ?? null,
     reportePorTipoCredito: query.data?.reportePorTipoCredito ?? null,
-    state: query.isLoading
+    state: query.isFetching || query.isLoading
       ? "loading"
       : query.isError
         ? "error"

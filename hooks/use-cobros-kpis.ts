@@ -33,6 +33,7 @@ type UseCobrosKpisOptions = {
   reportePorTipoDocumento?: ReportePorZonaDetalle | null;
   reportePorMunicipio?: ReportePorZonaDetalle | null;
   reportePorZona?: ReportePorZonaDetalle | null;
+  initialDataUpdatedAt?: number;
 };
 
 function getTopItem(reporte: ReportePorZonaDetalle | null): { nombre: string; valor: number } | null {
@@ -119,12 +120,14 @@ export function useCobrosKpis(
     },
     enabled: !!fechas,
     initialData: initialData ?? undefined,
+    initialDataUpdatedAt: options.initialDataUpdatedAt,
     staleTime: 5 * 60 * 1000,
+    refetchOnMount: false,
   });
 
   return {
     kpis: query.data ?? null,
-    state: query.isLoading
+    state: query.isFetching || query.isLoading
       ? "loading"
       : query.isError
         ? "error"

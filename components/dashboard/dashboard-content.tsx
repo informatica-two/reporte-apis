@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useReporteData } from "@/hooks/use-reporte-data";
+import { useFechasState } from "@/hooks/use-fechas-state";
 import type { ReporteKpis } from "@/hooks/use-reporte-data";
 import type { FechasParams } from "@/api/types";
 import { DashboardHeader } from "./dashboard-header";
@@ -26,19 +27,8 @@ export function DashboardContent({
   initialFechas,
   initialError,
 }: DashboardContentProps) {
-  const [fechas, setFechas] = React.useState<FechasParams | null>(
-    initialFechas,
-  );
-  
-  const initialDataTimestamp = React.useMemo(() => Date.now(), []);
-  
-  const handleDateChange = React.useCallback((newFechas: FechasParams) => {
-    setFechas(newFechas);
-  }, []);
-  
-  const isInitialFechas = 
-    fechas?.fecha_inicio === initialFechas.fecha_inicio &&
-    fechas?.fecha_fin === initialFechas.fecha_fin;
+  const { fechas, isInitialFechas, initialDataTimestamp, onDateChange } = 
+    useFechasState({ initialFechas });
   
   const { kpis, state, error, retry } = useReporteData(fechas, {
     initialData: isInitialFechas ? initialKpis : undefined,
@@ -49,7 +39,7 @@ export function DashboardContent({
 
   return (
     <>
-      <DashboardHeader onDateChange={handleDateChange} />
+      <DashboardHeader onDateChange={onDateChange} />
       <div className="flex-1 p-6">
         {(state === "idle" || state === "loading") && <DashboardSkeleton />}
         {state === "error" && displayError && (

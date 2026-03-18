@@ -20,6 +20,7 @@ export type UseActivosDetallesOptions = {
   initialReportePorTipoCredito?: ReportePorZonaDetalle | null;
   initialReportePorRango?: ReportePorZonaDetalle | null;
   initialReportePorAnio?: ReportePorZonaDetalle | null;
+  initialDataUpdatedAt?: number;
 };
 
 async function fetchActivosDetalles(
@@ -58,6 +59,7 @@ export function useActivosDetalles(
     queryFn: () => fetchActivosDetalles(fechas),
     enabled: !!fechas,
     staleTime: 5 * 60 * 1000,
+    refetchOnMount: false,
     refetchOnWindowFocus: false,
     initialData: options
       ? {
@@ -67,6 +69,7 @@ export function useActivosDetalles(
           reportePorAnio: options.initialReportePorAnio ?? null,
         }
       : undefined,
+    initialDataUpdatedAt: options?.initialDataUpdatedAt,
   });
 
   return {
@@ -74,7 +77,7 @@ export function useActivosDetalles(
     reportePorTipoCredito: query.data?.reportePorTipoCredito ?? null,
     reportePorRango: query.data?.reportePorRango ?? null,
     reportePorAnio: query.data?.reportePorAnio ?? null,
-    state: query.isLoading ? "loading" : query.isError ? "error" : "success",
+    state: query.isFetching || query.isLoading ? "loading" : query.isError ? "error" : "success",
     error: query.error instanceof Error ? query.error.message : null,
     retry: query.refetch,
   };

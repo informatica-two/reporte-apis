@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useCobrosDetalles } from "@/hooks/use-cobros-detalles";
 import { useCobrosKpis } from "@/hooks/use-cobros-kpis";
+import { useFechasState } from "@/hooks/use-fechas-state";
 import type { ReportePorZonaDetalle, FechasParams } from "@/api/types";
 import { DashboardHeader } from "./dashboard-header";
 import { ReportePorMedioPieCard } from "./charts/reporte-por-medio-pie-card";
@@ -65,15 +66,16 @@ export function CobrosContent({
   initialFechas,
   initialError,
 }: CobrosContentProps) {
-  const [fechas, setFechas] = React.useState<FechasParams | null>(
-    initialFechas,
-  );
+  const { fechas, isInitialFechas, initialDataTimestamp, onDateChange } = 
+    useFechasState({ initialFechas });
+  
   const { reportePorMedio, reportePorTipoDocumento, reportePorMunicipio, reportePorZona, state, error, retry } =
     useCobrosDetalles(fechas, {
-      initialReportePorMedio,
-      initialReportePorTipoDocumento,
-      initialReportePorMunicipio,
-      initialReportePorZona,
+      initialReportePorMedio: isInitialFechas ? initialReportePorMedio : undefined,
+      initialReportePorTipoDocumento: isInitialFechas ? initialReportePorTipoDocumento : undefined,
+      initialReportePorMunicipio: isInitialFechas ? initialReportePorMunicipio : undefined,
+      initialReportePorZona: isInitialFechas ? initialReportePorZona : undefined,
+      initialDataUpdatedAt: isInitialFechas ? initialDataTimestamp : undefined,
     });
 
   const { kpis: cobrosKpis, state: kpisState } = useCobrosKpis(fechas, {
@@ -81,14 +83,15 @@ export function CobrosContent({
     reportePorTipoDocumento,
     reportePorMunicipio,
     reportePorZona,
-    initialCobrosData,
+    initialCobrosData: isInitialFechas ? initialCobrosData : undefined,
+    initialDataUpdatedAt: isInitialFechas ? initialDataTimestamp : undefined,
   });
 
   const displayError = error ?? initialError;
 
   return (
     <>
-      <DashboardHeader onDateChange={setFechas} />
+      <DashboardHeader onDateChange={onDateChange} />
       <div className="flex-1 p-6 space-y-6">
         {(state === "idle" || state === "loading") && (
           <>

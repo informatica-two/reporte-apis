@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useActivosDetalles } from "@/hooks/use-activos-detalles";
 import { useActivosKpis } from "@/hooks/use-activos-kpis";
+import { useFechasState } from "@/hooks/use-fechas-state";
 import type { ReportePorZonaDetalle, FechasParams } from "@/api/types";
 import { DashboardHeader } from "./dashboard-header";
 import { ReporteActivosPorZonaCard } from "./charts/reporte-activos-por-zona-card";
@@ -65,15 +66,16 @@ export function ActivosContent({
   initialFechas,
   initialError,
 }: ActivosContentProps) {
-  const [fechas, setFechas] = React.useState<FechasParams | null>(
-    initialFechas,
-  );
+  const { fechas, isInitialFechas, initialDataTimestamp, onDateChange } = 
+    useFechasState({ initialFechas });
+  
   const { reportePorZona, reportePorTipoCredito, reportePorRango, reportePorAnio, state, error, retry } =
     useActivosDetalles(fechas, {
-      initialReportePorZona,
-      initialReportePorTipoCredito,
-      initialReportePorRango,
-      initialReportePorAnio,
+      initialReportePorZona: isInitialFechas ? initialReportePorZona : undefined,
+      initialReportePorTipoCredito: isInitialFechas ? initialReportePorTipoCredito : undefined,
+      initialReportePorRango: isInitialFechas ? initialReportePorRango : undefined,
+      initialReportePorAnio: isInitialFechas ? initialReportePorAnio : undefined,
+      initialDataUpdatedAt: isInitialFechas ? initialDataTimestamp : undefined,
     });
 
   const { kpis: activosKpis, state: kpisState } = useActivosKpis(fechas, {
@@ -81,14 +83,15 @@ export function ActivosContent({
     reportePorTipoCredito,
     reportePorRango,
     reportePorAnio,
-    initialActivosData,
+    initialActivosData: isInitialFechas ? initialActivosData : undefined,
+    initialDataUpdatedAt: isInitialFechas ? initialDataTimestamp : undefined,
   });
 
   const displayError = error ?? initialError;
 
   return (
     <>
-      <DashboardHeader onDateChange={setFechas} />
+      <DashboardHeader onDateChange={onDateChange} />
       <div className="flex-1 p-6 space-y-6">
         {(state === "idle" || state === "loading") && (
           <>

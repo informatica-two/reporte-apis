@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useVentaDetalles } from "@/hooks/use-venta-detalles";
 import { useVentasKpis } from "@/hooks/use-ventas-kpis";
+import { useFechasState } from "@/hooks/use-fechas-state";
 import type { ReportePorZonaDetalle, FechasParams } from "@/api/types";
 import { DashboardHeader } from "./dashboard-header";
 import { ReportePorZonaCard } from "./charts/reporte-por-zona-card";
@@ -62,15 +63,16 @@ export function VentasContent({
   initialFechas,
   initialError,
 }: VentasContentProps) {
-  const [fechas, setFechas] = React.useState<FechasParams | null>(
-    initialFechas,
-  );
+  const { fechas, isInitialFechas, initialDataTimestamp, onDateChange } = 
+    useFechasState({ initialFechas });
+  
   const { reportePorZona, reportePorImpulsadora, reporteDetalle3, reportePorTipoCredito, state, error, retry } =
     useVentaDetalles(fechas, {
-      initialReportePorZona,
-      initialReportePorImpulsadora,
-      initialReporteDetalle3,
-      initialReportePorTipoCredito,
+      initialReportePorZona: isInitialFechas ? initialReportePorZona : undefined,
+      initialReportePorImpulsadora: isInitialFechas ? initialReportePorImpulsadora : undefined,
+      initialReporteDetalle3: isInitialFechas ? initialReporteDetalle3 : undefined,
+      initialReportePorTipoCredito: isInitialFechas ? initialReportePorTipoCredito : undefined,
+      initialDataUpdatedAt: isInitialFechas ? initialDataTimestamp : undefined,
     });
 
   const { kpis: ventasKpis, state: kpisState } = useVentasKpis(fechas, {
@@ -78,14 +80,15 @@ export function VentasContent({
     reportePorImpulsadora,
     reporteDetalle3,
     reportePorTipoCredito,
-    initialVentaData,
+    initialVentaData: isInitialFechas ? initialVentaData : undefined,
+    initialDataUpdatedAt: isInitialFechas ? initialDataTimestamp : undefined,
   });
 
   const displayError = error ?? initialError;
 
   return (
     <>
-      <DashboardHeader onDateChange={setFechas} />
+      <DashboardHeader onDateChange={onDateChange} />
       <div className="flex-1 p-6 space-y-6">
         {(state === "idle" || state === "loading") && (
           <>

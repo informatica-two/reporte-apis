@@ -17,6 +17,7 @@ type UseCobrosDetallesOptions = {
   initialReportePorTipoDocumento?: ReportePorZonaDetalle | null;
   initialReportePorMunicipio?: ReportePorZonaDetalle | null;
   initialReportePorZona?: ReportePorZonaDetalle | null;
+  initialDataUpdatedAt?: number;
 };
 
 async function fetchCobrosDetalles(
@@ -91,7 +92,9 @@ export function useCobrosDetalles(
     },
     enabled: !!fechas,
     initialData,
+    initialDataUpdatedAt: options.initialDataUpdatedAt,
     staleTime: 5 * 60 * 1000,
+    refetchOnMount: false,
   });
 
   return {
@@ -99,7 +102,7 @@ export function useCobrosDetalles(
     reportePorTipoDocumento: query.data?.reportePorTipoDocumento ?? null,
     reportePorMunicipio: query.data?.reportePorMunicipio ?? null,
     reportePorZona: query.data?.reportePorZona ?? null,
-    state: query.isLoading
+    state: query.isFetching || query.isLoading
       ? "loading"
       : query.isError
         ? "error"

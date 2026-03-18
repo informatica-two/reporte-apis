@@ -37,6 +37,7 @@ type UseActivosKpisOptions = {
   reportePorRango?: ReportePorZonaDetalle | null;
   reportePorAnio?: ReportePorZonaDetalle | null;
   initialActivosData?: any | null;
+  initialDataUpdatedAt?: number;
 };
 
 function calculateActivosKpis(
@@ -192,6 +193,7 @@ export function useActivosKpis(
     },
     enabled: !!fechas && !!options?.initialActivosData,
     staleTime: 5 * 60 * 1000,
+    refetchOnMount: false,
     initialData: options?.initialActivosData && fechas
       ? calculateActivosKpis(
           options.initialActivosData,
@@ -202,11 +204,12 @@ export function useActivosKpis(
           fechas
         )
       : undefined,
+    initialDataUpdatedAt: options?.initialDataUpdatedAt,
   });
 
   return {
     kpis: query.data,
-    state: query.isLoading ? "loading" : query.isError ? "error" : "success",
+    state: query.isFetching || query.isLoading ? "loading" : query.isError ? "error" : "success",
     error: query.error instanceof Error ? query.error.message : null,
   };
 }
