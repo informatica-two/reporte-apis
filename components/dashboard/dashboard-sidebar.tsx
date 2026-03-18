@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 import NProgress from "nprogress";
 import {
   Home,
@@ -9,12 +10,16 @@ import {
   HandCoins,
   Users,
   LayoutDashboard,
+  RefreshCw,
+  Moon,
+  Sun,
 } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type SidebarItem = {
@@ -38,9 +43,15 @@ function isActive(pathname: string, href: string): boolean {
   return pathname.startsWith(href);
 }
 
-export function DashboardSidebar() {
+export type DashboardSidebarProps = {
+  onRefresh?: () => void;
+};
+
+export function DashboardSidebar({ onRefresh }: DashboardSidebarProps = {}) {
   const pathname = usePathname();
   const router = useRouter();
+  const { resolvedTheme, setTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   const handleClick = (item: SidebarItem) => {
     if (item.href.startsWith("/#")) {
@@ -111,6 +122,44 @@ export function DashboardSidebar() {
         </TooltipTrigger>
         <TooltipContent side="right">Dashboard Personalizable</TooltipContent>
       </Tooltip>
+
+      <div className="mt-auto flex flex-col gap-1">
+        {onRefresh && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onRefresh}
+                className="h-10 w-10 text-muted-foreground hover:bg-muted hover:text-foreground"
+              >
+                <RefreshCw className="h-5 w-5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right">Actualizar datos</TooltipContent>
+          </Tooltip>
+        )}
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(isDark ? "light" : "dark")}
+              className="h-10 w-10 text-muted-foreground hover:bg-muted hover:text-foreground"
+            >
+              {isDark ? (
+                <Sun className="h-5 w-5" />
+              ) : (
+                <Moon className="h-5 w-5" />
+              )}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="right">
+            {isDark ? "Modo claro" : "Modo oscuro"}
+          </TooltipContent>
+        </Tooltip>
+      </div>
     </aside>
   );
 }

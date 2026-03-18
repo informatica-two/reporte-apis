@@ -85,7 +85,7 @@ export function VentasContent({
 
   return (
     <>
-      <DashboardHeader onDateChange={setFechas} onRefresh={() => retry()} />
+      <DashboardHeader onDateChange={setFechas} />
       <div className="flex-1 p-6 space-y-6">
         {(state === "idle" || state === "loading") && (
           <>
