@@ -1,6 +1,9 @@
 import { DashboardSidebarWrapper } from "@/components/dashboard/dashboard-sidebar-wrapper";
 import { ProgressBar } from "@/components/progress-bar";
 
+/** Live report APIs: prerender at build would block on slow/unreachable backends (60s limit). */
+export const dynamic = "force-dynamic";
+
 export default function DashboardLayout({
   children,
 }: {

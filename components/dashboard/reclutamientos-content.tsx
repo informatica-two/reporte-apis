@@ -8,7 +8,7 @@ import type { ReportePorZonaDetalle, FechasParams } from "@/api/types";
 import { DashboardHeader } from "./dashboard-header";
 import { ReclutamientosPorTipoPie } from "./charts/reclutamientos-por-tipo-pie";
 import { ReclutamientosPorEstatusDonut } from "./charts/reclutamientos-por-estatus-donut";
-import { ReclutamientosPorTipoCreditoRadial } from "./charts/reclutamientos-por-tipo-credito-radial";
+import { ReclutamientosPorTipoCreditoBar } from "./charts/reclutamientos-por-tipo-credito-bar";
 import { ReclutamientosKpiCards } from "./kpis/reclutamientos-kpi-cards";
 import { TasaAprobacionGauge } from "./charts/tasa-aprobacion-gauge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -137,7 +137,7 @@ export function ReclutamientosContent({
                 denegados={reclutamientosKpis?.denegadosCount ?? 0}
                 procesando={reclutamientosKpis?.procesandoCount ?? 0}
               />
-              <ReclutamientosPorTipoCreditoRadial reportePorTipoCredito={reportePorTipoCredito} />
+              <ReclutamientosPorTipoCreditoBar reportePorTipoCredito={reportePorTipoCredito} />
             </div>
           </>
         )}
