@@ -74,14 +74,12 @@ export function ReclutamientosPorTipoCreditoRadial({ reportePorTipoCredito }: Re
                 endAngle={-270}
               >
                 <RadialBar
-                  minAngle={15}
                   label={{
                     position: "insideStart",
                     fill: "var(--card)",
                     formatter: (value: number) => `${value.toFixed(0)}%`,
                   }}
                   background
-                  clockWise
                   dataKey="percentage"
                 />
                 <ChartTooltip

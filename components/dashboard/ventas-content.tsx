@@ -9,7 +9,7 @@ import { DashboardHeader } from "./dashboard-header";
 import { ReportePorZonaCard } from "./charts/reporte-por-zona-card";
 import { ReportePorImpulsadoraCard } from "./charts/reporte-por-impulsadora-card";
 import { ReporteDetalle3Card } from "./charts/reporte-detalle3-card";
-import { ReportePorTipoCreditoCard } from "./charts/reporte-por-tipo-credito-card";
+import { VentaPorTipoCreditoPie } from "./charts/venta-por-tipo-credito-pie";
 import { VentasKpiCards } from "./kpis/ventas-kpi-cards";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -162,7 +162,7 @@ export function VentasContent({
                 reportePorImpulsadora={reportePorImpulsadora}
               />
               <ReporteDetalle3Card reporteDetalle3={reporteDetalle3} />
-              <ReportePorTipoCreditoCard reportePorTipoCredito={reportePorTipoCredito} />
+              <VentaPorTipoCreditoPie reportePorTipoCredito={reportePorTipoCredito} />
             </div>
           </>
         )}

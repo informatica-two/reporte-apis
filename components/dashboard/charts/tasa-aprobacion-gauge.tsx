@@ -63,7 +63,7 @@ export function TasaAprobacionGauge({ aprobados, denegados, procesando }: TasaAp
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <p className={cn("text-5xl font-bold", getColorClass(tasaAprobacion))}>
-              {formatNumber(tasaAprobacion, 1)}%
+              {tasaAprobacion.toFixed(1)}%
             </p>
             <p className="mt-2 text-sm text-muted-foreground">Tasa de Aprobación</p>
           </div>

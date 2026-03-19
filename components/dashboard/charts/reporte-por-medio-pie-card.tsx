@@ -81,6 +81,11 @@ export function ReportePorMedioPieCard({ reportePorMedio }: ReportePorMedioPieCa
                     cx="50%"
                     cy="50%"
                     outerRadius={100}
+                    paddingAngle={8}
+                    minAngle={4}
+                    stroke="var(--card)"
+                    strokeWidth={2}
+                    cornerRadius={6}
                     label={({ name, percent }) => 
                       `${name} ${(percent * 100).toFixed(1)}%`
                     }

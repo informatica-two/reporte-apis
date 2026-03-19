@@ -83,9 +83,11 @@ export function ReporteActivosTipoCreditoPie({
                     cy="50%"
                     innerRadius={60}
                     outerRadius={100}
-                    paddingAngle={3}
-                    stroke="var(--background)"
+                    paddingAngle={8}
+                    minAngle={4}
+                    stroke="var(--card)"
                     strokeWidth={2}
+                    cornerRadius={6}
                   >
                     {chartData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.fill} />

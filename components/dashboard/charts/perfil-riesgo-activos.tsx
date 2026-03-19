@@ -102,9 +102,11 @@ export function PerfilRiesgoActivos({ reportePorRango }: PerfilRiesgoActivosProp
                     cy="50%"
                     innerRadius={50}
                     outerRadius={85}
-                    paddingAngle={4}
-                    stroke="var(--background)"
+                    paddingAngle={8}
+                    minAngle={4}
+                    stroke="var(--card)"
                     strokeWidth={2}
+                    cornerRadius={6}
                   >
                     {chartData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.fill} />

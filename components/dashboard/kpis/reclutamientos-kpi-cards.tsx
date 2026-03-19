@@ -31,7 +31,7 @@ export function ReclutamientosKpiCards({ kpis }: ReclutamientosKpiCardsProps) {
                 {formatNumber(kpis.totalReclutamientos)}
               </p>
               <div className="flex gap-4 text-sm text-muted-foreground">
-                <span>{formatNumber(kpis.reclutamientosPorDia, 1)} por día</span>
+                <span>{kpis.reclutamientosPorDia.toFixed(1)} por día</span>
                 <span>•</span>
                 <span>{kpis.dias} días</span>
               </div>
@@ -63,7 +63,7 @@ export function ReclutamientosKpiCards({ kpis }: ReclutamientosKpiCardsProps) {
                   Tasa de Aprobación
                 </p>
                 <p className="text-2xl font-bold text-foreground">
-                  {formatNumber(kpis.tasaAprobacion, 1)}%
+                  {kpis.tasaAprobacion.toFixed(1)}%
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {formatNumber(kpis.aprobadosCount)} aprobados
@@ -87,7 +87,7 @@ export function ReclutamientosKpiCards({ kpis }: ReclutamientosKpiCardsProps) {
                   {formatNumber(kpis.proCount)}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {formatNumber(kpis.proPct, 1)}% del total
+                  {kpis.proPct.toFixed(1)}% del total
                 </p>
               </div>
             </div>
@@ -108,7 +108,7 @@ export function ReclutamientosKpiCards({ kpis }: ReclutamientosKpiCardsProps) {
                   {formatNumber(kpis.procesandoCount)}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {formatNumber(kpis.procesandoPct, 1)}% del total
+                  {kpis.procesandoPct.toFixed(1)}% del total
                 </p>
               </div>
             </div>
@@ -138,7 +138,7 @@ export function ReclutamientosKpiCards({ kpis }: ReclutamientosKpiCardsProps) {
                 {formatNumber(kpis.ofiCount)}
               </p>
               <p className="mt-1 text-xs text-muted-foreground">
-                {formatNumber(kpis.ofiPct, 1)}% del total
+                {kpis.ofiPct.toFixed(1)}% del total
               </p>
             </div>
             <div className="rounded-lg border border-border bg-muted/40 p-4">
@@ -147,7 +147,7 @@ export function ReclutamientosKpiCards({ kpis }: ReclutamientosKpiCardsProps) {
                 {formatNumber(kpis.rdsCount)}
               </p>
               <p className="mt-1 text-xs text-muted-foreground">
-                {formatNumber(kpis.rdsPct, 1)}% del total
+                {kpis.rdsPct.toFixed(1)}% del total
               </p>
             </div>
             <div className="rounded-lg border border-border bg-muted/40 p-4">
@@ -156,7 +156,7 @@ export function ReclutamientosKpiCards({ kpis }: ReclutamientosKpiCardsProps) {
                 {formatNumber(kpis.creCount)}
               </p>
               <p className="mt-1 text-xs text-muted-foreground">
-                {formatNumber(kpis.crePct, 1)}% del total
+                {kpis.crePct.toFixed(1)}% del total
               </p>
             </div>
           </div>

@@ -105,9 +105,11 @@ export function DesgloseVentasWaterfall({ kpis }: DesgloseVentasWaterfallProps) 
                 cy="50%"
                 innerRadius={60}
                 outerRadius={90}
-                paddingAngle={emptyData ? 0 : 2}
-                stroke="var(--background)"
+                paddingAngle={emptyData ? 0 : 6}
+                minAngle={emptyData ? 0 : 3}
+                stroke="var(--card)"
                 strokeWidth={2}
+                cornerRadius={emptyData ? 0 : 5}
                 label={
                   !emptyData
                     ? renderCenterLabel(
