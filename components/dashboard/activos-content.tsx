@@ -69,14 +69,22 @@ export function ActivosContent({
   const { fechas, isInitialFechas, initialDataTimestamp, onDateChange } = 
     useFechasState({ initialFechas });
   
-  const { reportePorZona, reportePorTipoCredito, reportePorRango, reportePorAnio, state, error, retry } =
-    useActivosDetalles(fechas, {
-      initialReportePorZona: isInitialFechas ? initialReportePorZona : undefined,
-      initialReportePorTipoCredito: isInitialFechas ? initialReportePorTipoCredito : undefined,
-      initialReportePorRango: isInitialFechas ? initialReportePorRango : undefined,
-      initialReportePorAnio: isInitialFechas ? initialReportePorAnio : undefined,
-      initialDataUpdatedAt: isInitialFechas ? initialDataTimestamp : undefined,
-    });
+  const {
+    reportePorZona,
+    reportePorTipoCredito,
+    reportePorRango,
+    reportePorAnio,
+    state,
+    error,
+    retry,
+    isPlaceholderData: detallesEnPlaceholder,
+  } = useActivosDetalles(fechas, {
+    initialReportePorZona: isInitialFechas ? initialReportePorZona : undefined,
+    initialReportePorTipoCredito: isInitialFechas ? initialReportePorTipoCredito : undefined,
+    initialReportePorRango: isInitialFechas ? initialReportePorRango : undefined,
+    initialReportePorAnio: isInitialFechas ? initialReportePorAnio : undefined,
+    initialDataUpdatedAt: isInitialFechas ? initialDataTimestamp : undefined,
+  });
 
   const { kpis: activosKpis, state: kpisState } = useActivosKpis(fechas, {
     reportePorZona,
@@ -85,6 +93,7 @@ export function ActivosContent({
     reportePorAnio,
     initialActivosData: isInitialFechas ? initialActivosData : undefined,
     initialDataUpdatedAt: isInitialFechas ? initialDataTimestamp : undefined,
+    detallesSonPlaceholder: detallesEnPlaceholder,
   });
 
   const displayError = error ?? initialError;

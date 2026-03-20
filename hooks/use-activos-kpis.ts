@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import type { FechasParams, ReportePorZonaDetalle } from "@/api/types";
+import { getActivos } from "@/api/reporteVisual";
 import { parseNumberLabel } from "@/lib/utils";
 
 export type ActivosKpis = {
@@ -38,6 +39,8 @@ type UseActivosKpisOptions = {
   reportePorAnio?: ReportePorZonaDetalle | null;
   initialActivosData?: any | null;
   initialDataUpdatedAt?: number;
+  /** Detalles aún son del rango anterior (placeholder) → no mezclar con fechas nuevas ni getActivos nuevo. */
+  detallesSonPlaceholder?: boolean;
 };
 
 function calculateActivosKpis(
@@ -167,44 +170,67 @@ export function useActivosKpis(
   fechas: FechasParams | null,
   options?: UseActivosKpisOptions
 ) {
-  const query = useQuery({
-    queryKey: ["activos", "kpis", fechas],
-    queryFn: async () => {
-      if (!fechas) return null;
-      
-      const activosData = options?.initialActivosData;
-      const reportePorZona = options?.reportePorZona;
-      const reportePorTipoCredito = options?.reportePorTipoCredito;
-      const reportePorRango = options?.reportePorRango;
-      const reportePorAnio = options?.reportePorAnio;
+  const {
+    reportePorZona,
+    reportePorTipoCredito,
+    reportePorRango,
+    reportePorAnio,
+    initialActivosData,
+    initialDataUpdatedAt,
+    detallesSonPlaceholder,
+  } = options ?? {};
 
-      if (!activosData || !reportePorZona || !reportePorTipoCredito || !reportePorRango || !reportePorAnio) {
-        return null;
-      }
+  const hasSsrHydration =
+    fechas != null &&
+    initialActivosData != null &&
+    reportePorZona != null &&
+    reportePorTipoCredito != null &&
+    reportePorRango != null &&
+    reportePorAnio != null;
 
-      return calculateActivosKpis(
-        activosData,
+  const initialData = hasSsrHydration
+    ? calculateActivosKpis(
+        initialActivosData,
         reportePorZona,
         reportePorTipoCredito,
         reportePorRango,
         reportePorAnio,
         fechas
+      )
+    : undefined;
+
+  const detallesListos =
+    reportePorZona != null &&
+    reportePorTipoCredito != null &&
+    reportePorRango != null &&
+    reportePorAnio != null;
+
+  const query = useQuery({
+    queryKey: ["activos", "kpis", fechas],
+    queryFn: async ({ signal }) => {
+      if (!fechas) throw new Error("Fechas requeridas");
+      const activosRes = await getActivos(fechas, signal);
+      if (!activosRes.success) {
+        throw new Error(activosRes.error.message);
+      }
+      const activosData = "data" in activosRes ? activosRes.data.detalle : null;
+      if (!activosData) {
+        throw new Error("Datos de activos principal inválidos");
+      }
+      return calculateActivosKpis(
+        activosData,
+        reportePorZona!,
+        reportePorTipoCredito!,
+        reportePorRango!,
+        reportePorAnio!,
+        fechas
       );
     },
-    enabled: !!fechas && !!options?.initialActivosData,
+    enabled: !!fechas && detallesListos && !detallesSonPlaceholder,
     staleTime: 5 * 60 * 1000,
     refetchOnMount: false,
-    initialData: options?.initialActivosData && fechas
-      ? calculateActivosKpis(
-          options.initialActivosData,
-          options.reportePorZona ?? null,
-          options.reportePorTipoCredito ?? null,
-          options.reportePorRango ?? null,
-          options.reportePorAnio ?? null,
-          fechas
-        )
-      : undefined,
-    initialDataUpdatedAt: options?.initialDataUpdatedAt,
+    initialData,
+    initialDataUpdatedAt,
   });
 
   return {
