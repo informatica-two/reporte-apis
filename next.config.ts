@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   async headers() {
     const allowedOrigins =
       process.env.IFRAME_ALLOWED_ORIGINS ||
-      "https://mivogue.com https://www.mivogue.com";
+      "https://mivogue.com https://www.mivogue.com https://mivogue.com:83/ https://35.231.56.116:83/";
     return [
       {
         source: "/:path*",
