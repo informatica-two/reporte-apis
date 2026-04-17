@@ -41,13 +41,12 @@ export function ReporteActivosTipoCreditoPie({
 }: ReporteActivosTipoCreditoPieProps) {
   const datos = reportePorTipoCredito?.datos ?? [];
   const chartData = datos
-    .map((d, i) => ({
-      name: d.Etiqueta,
-      value: parseNumberLabel(d.Valor),
-      fill: CREDITO_COLORS[i % CREDITO_COLORS.length],
-    }))
-    .filter(d => !d.name.includes("EMP"))
-    .sort((a, b) => b.value - a.value);
+  .map((d, i) => ({
+    name: d.Etiqueta,
+    value: parseNumberLabel(d.Valor),
+    fill: CREDITO_COLORS[i % CREDITO_COLORS.length],
+  }))
+  .sort((a, b) => b.value - a.value);
 
   const total = chartData.reduce((s, d) => s + d.value, 0);
 
