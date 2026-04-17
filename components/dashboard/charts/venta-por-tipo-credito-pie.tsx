@@ -56,7 +56,7 @@ export function VentaPorTipoCreditoPie({
       value: parseNumberLabel(d.Valor),
       fill: CREDITO_COLORS[i % CREDITO_COLORS.length],
     }))
-    .filter((d) => !d.etiqueta.includes("EMP") && d.value > 0)
+    .filter((d) => d.value > 0)
     .sort((a, b) => b.value - a.value);
 
   const total = chartData.reduce((s, d) => s + d.value, 0);
