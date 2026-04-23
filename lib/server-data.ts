@@ -7,6 +7,7 @@ import {
   getVentaDetalle2,
   getVentaDetalle3,
   getVentaDetalle4,
+  getVentaDetalle5,
   getCobrosDetalle1,
   getCobrosDetalle2,
   getCobrosDetalle3,
@@ -118,6 +119,7 @@ export async function fetchDashboardDetallesServer(
         getCobrosDetalle4(fechas),
         getActivosDetalle2(fechas),
         getVentaDetalle4(fechas),
+        getVentaDetalle5(fechas),
       ]);
 
     const duration = Math.round(performance.now() - startTime);
@@ -194,6 +196,7 @@ export async function fetchVentaDetallesServer(fechas: FechasParams): Promise<{
       getVentaDetalle2(fechas),
       getVentaDetalle3(fechas),
       getVentaDetalle4(fechas),
+      getVentaDetalle5(fechas),
     ]);
     
     const duration = Math.round(performance.now() - startTime);

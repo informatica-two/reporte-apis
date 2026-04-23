@@ -142,6 +142,15 @@ export const getVentaDetalle4 =
   );
 
 /**
+ * Obtiene el reporte por tipo de crédito (venta/detalle_5) para el rango de fechas indicado.
+ * Misma estructura: titulo_reporte y datos (Etiqueta, Valor).
+ */
+  export const getVentaDetalle5 =
+  createReporteFetcher<ReportePorZonaDetalle>(
+    API_ENDPOINTS.reporteVisual.ventaDetalle5
+  );
+
+/**
  * Obtiene el reporte de cobros por medio (cobros/detalle_1) para el rango de fechas indicado.
  * Incluye titulo_reporte y datos con Etiqueta (medio) y Valor (monto).
  */

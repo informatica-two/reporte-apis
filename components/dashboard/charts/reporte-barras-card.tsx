@@ -94,8 +94,8 @@ export function ReporteBarrasCard({
                   <YAxis
                     type="category"
                     dataKey="name"
-                    width={52}
-                    tick={{ fontSize: 12 }}
+                    width={100}
+                    tick={{ fontSize: 10 }}
                     axisLine={false}
                     tickLine={false}
                   />
@@ -112,9 +112,9 @@ export function ReporteBarrasCard({
                 <table className="w-full text-xs">
                   <thead className="sticky top-0 bg-muted/80 backdrop-blur">
                     <tr className="border-b border-border/60">
-                      <th className="px-3 py-2 text-left font-medium text-muted-foreground">
-                        {columnaEtiqueta}
-                      </th>
+                    <th className="px-3 py-2 text-left font-medium text-muted-foreground text-xs">
+                      {columnaEtiqueta?.replace(/#/g, '') || ''}
+                    </th>
                       <th className="px-3 py-2 text-right font-medium text-muted-foreground">
                         Venta
                       </th>
@@ -126,7 +126,9 @@ export function ReporteBarrasCard({
                         key={`${d.name}-${i}`}
                         className="border-b border-border/40 last:border-0"
                       >
-                        <td className="px-3 py-1.5 font-medium">{d.name}</td>
+                        <td className="px-3 py-1.5 font-medium text-xs">
+                          {d.name.replace(/#/g, '')}
+                        </td>
                         <td className="px-3 py-1.5 text-right font-mono tabular-nums">
                           {formatMoney(d.valor)}
                         </td>

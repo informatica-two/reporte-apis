@@ -22,7 +22,7 @@ const TIPO_LABELS: Record<string, string> = {
   CRE_30: "Crédito 30",
   CRE: "Crédito",
   CON: "Contado",
-  EMP: "Empresarial",
+  EMP: "Empleados",
   OTR: "Otros",
 };
 
