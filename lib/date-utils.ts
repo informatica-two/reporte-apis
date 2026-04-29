@@ -84,7 +84,7 @@ export function getDateRangeByPeriod(period: "hoy" | "7dias" | "30dias" | "mesAc
  * del selector (fecha local + formatDateApi, alineado con SSR y cliente).
  */
 export function getDefaultFechas(): FechasParams {
-  return getDateRangeByPeriod("30dias");
+  return getDateRangeByPeriod("mesActual");
 }
 
 export function getPeriodLabel(period: "hoy" | "7dias" | "30dias" | "mesActual"): string {

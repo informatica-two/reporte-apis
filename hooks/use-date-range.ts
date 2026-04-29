@@ -16,7 +16,7 @@ const PERIODS: { key: PeriodKey; label: string }[] = [
   { key: "mesActual", label: "Mes actual" },
 ];
 
-const DEFAULT_PERIOD: PeriodKey = "30dias";
+const DEFAULT_PERIOD: PeriodKey = "mesActual";
 
 export type UseDateRangeOptions = {
   /** Fechas con las que hidrató el servidor; alinea el calendario y evita onDateChange fantasma al montar. */
