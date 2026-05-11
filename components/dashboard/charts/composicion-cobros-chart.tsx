@@ -83,7 +83,7 @@ export function ComposicionCobrosChart({ kpis }: ComposicionCobrosChartProps) {
       <CardHeader className="px-4 pb-2">
         <CardTitle className="text-base">Composición de cobros</CardTitle>
         <CardDescription className="text-xs">
-          Cobro bruto − Anulaciones = Cobro neto
+          Cobro Total bruto − Anulaciones = Cobro Total neto
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-3 px-4 pt-0">
@@ -134,7 +134,7 @@ export function ComposicionCobrosChart({ kpis }: ComposicionCobrosChartProps) {
         </div>
 
         <div className="flex flex-col items-center py-2 text-center">
-          <div className="text-xs text-muted-foreground">Cobro bruto</div>
+          <div className="text-xs text-muted-foreground">Cobro Total bruto</div>
           <div className="text-2xl font-bold tabular-nums">
             {formatMoney(kpis.cobroBruto)}
           </div>
@@ -147,7 +147,7 @@ export function ComposicionCobrosChart({ kpis }: ComposicionCobrosChartProps) {
                 className="h-2.5 w-2.5 shrink-0 rounded-sm"
                 style={{ backgroundColor: "var(--chart-1)" }}
               />
-              <span className="text-muted-foreground">Cobro neto:</span>
+              <span className="text-muted-foreground">Cobro Total neto:</span>
               <span className="font-mono font-medium">
                 {formatMoney(cobroNeto)}
               </span>

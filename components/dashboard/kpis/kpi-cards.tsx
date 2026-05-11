@@ -38,7 +38,7 @@ const ROW1_ESTRATEGICOS = [
   },
   {
     key: "cobroNeto" as const,
-    title: "Cobro neto",
+    title: "Cobro Total neto",
     icon: Banknote,
     format: (k: ReporteKpis) => formatMoney(k.cobroNeto),
     description: "Dinero efectivamente cobrado.",
