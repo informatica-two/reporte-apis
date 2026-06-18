@@ -35,6 +35,7 @@ const ENDPOINTS = [
   { name: "venta/detalle_2 (reporte por impulsadora)", path: "/reporte_visual/venta/detalle_2" },
   { name: "venta/detalle_3 (reporte por línea)", path: "/reporte_visual/venta/detalle_3" },
   { name: "venta/detalle_4 (reporte por tipo crédito)", path: "/reporte_visual/venta/detalle_4" },
+  { name: "venta/detalle_5 (reporte por tipo de compra)", path: "/reporte_visual/venta/detalle_5" },
   { name: "reclutamientos", path: "/reporte_visual/reclutamientos" },
 ];
 

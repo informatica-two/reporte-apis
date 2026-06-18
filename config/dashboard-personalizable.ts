@@ -167,6 +167,32 @@ export const CONFIGURACION_DASHBOARD: SlotConfig[] = [
   //   3. En "endpoint" pon la ruta de tu API
   //   4. En "mapearDatos" explícale cómo leer la respuesta de tu API
   //
+  {
+    titulo: "Reporte por Tipo de Compra",
+    descripcion: "Distribución de ventas por tipo de compra",
+    tipo: "barras",
+    tamano: "completo",
+    formatoValor: "moneda",
+    etiquetaValor: "Ventas",
+  
+    endpoint: "/api/reporte-visual/venta/detalle_5",
+  
+    mapearDatos: (respuesta) =>
+      (
+        respuesta as {
+          detalle: {
+            datos: Array<{
+              Etiqueta: string;
+              Valor: string;
+            }>;
+          };
+        }
+      ).detalle.datos.map((item) => ({
+        etiqueta: item.Etiqueta,
+        valor: Number(item.Valor),
+      })),
+  },
+
   // {
   //   titulo: "Ventas por Mes",
   //   descripcion: "Total de ventas agrupado por mes del período",
