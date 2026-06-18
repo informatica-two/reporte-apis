@@ -88,5 +88,5 @@ export function PersonalizablePage({ fechas }: PersonalizablePageProps) {
         )
       )}
     </>
-  );
+  );  
 }
