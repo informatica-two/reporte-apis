@@ -58,11 +58,16 @@ export type FilaTabla = Record<string, string | number>;
 
 /** Configuración de un slot (posición en el dashboard) */
 export type SlotConfig = {
+  categoria?: string;
+
   /** Título que aparece en la parte superior de la tarjeta */
   titulo: string;
 
   /** Descripción breve que aparece debajo del título (opcional) */
   descripcion?: string;
+
+  // Aqui ponemos una leyenda explicativa
+  leyenda?: string;
 
   /** Tipo de gráfica a mostrar */
   tipo: TipoGrafica;
@@ -159,6 +164,15 @@ export type SlotConfig = {
 // Para desactivar un slot, vuelve a comentarlo o elimina su bloque.
 // =============================================================================
 
+const etiquetasCompra: Record<string, string> = {
+  DIST_ERP: "Distribuidor por ERP",
+  DIST_ONLINE: "Distribuidor Online",
+  EMP_ERP: "Empleado por ERP",
+  CONS_ERP: "Consumidor por ERP",
+  CONS_ONLINE: "Consumidor Online",
+  CONS_SERV: "Consumidor Por Servicio",
+};
+
 export const CONFIGURACION_DASHBOARD: SlotConfig[] = [
   // ── SLOT 1 ──────────────────────────────────────────────────────────────────
   // INSTRUCCIONES:
@@ -167,9 +181,12 @@ export const CONFIGURACION_DASHBOARD: SlotConfig[] = [
   //   3. En "endpoint" pon la ruta de tu API
   //   4. En "mapearDatos" explícale cómo leer la respuesta de tu API
   //
+  
   {
+    categoria: "Ventas",
     titulo: "Reporte por Tipo de Compra",
     descripcion: "Distribución de ventas por tipo de compra",
+    leyenda: "ERP = compras registradas desde el sistema. Online = Tienda en Linea. Por Servicio: referencia a los códigos: 0101010102 0101010104 0101010105",
     tipo: "barras",
     tamano: "completo",
     formatoValor: "moneda",
@@ -178,19 +195,19 @@ export const CONFIGURACION_DASHBOARD: SlotConfig[] = [
     endpoint: "/api/reporte-visual/venta/detalle_5",
   
     mapearDatos: (respuesta) =>
-      (
-        respuesta as {
-          detalle: {
-            datos: Array<{
-              Etiqueta: string;
-              Valor: string;
-            }>;
-          };
-        }
-      ).detalle.datos.map((item) => ({
-        etiqueta: item.Etiqueta,
-        valor: Number(item.Valor),
-      })),
+    (
+      respuesta as {
+        detalle: {
+          datos: Array<{
+            Etiqueta: string;
+            Valor: string;
+          }>;
+        };
+      }
+    ).detalle.datos.map((item) => ({
+      etiqueta: etiquetasCompra[item.Etiqueta] ?? item.Etiqueta,
+      valor: Number(item.Valor),
+    })),
   },
 
   // {

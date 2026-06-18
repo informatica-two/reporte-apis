@@ -41,13 +41,52 @@ export function PersonalizablePage({ fechas }: PersonalizablePageProps) {
     );
   }
 
+  const reportesAgrupados = slotsActivos.reduce(
+    (acc, slot) => {
+      const categoria = slot.categoria || "General";
+  
+      if (!acc[categoria]) {
+        acc[categoria] = [];
+      }
+  
+      acc[categoria].push(slot);
+  
+      return acc;
+    },
+    {} as Record<string, typeof slotsActivos>
+  );
+
   return (
-    <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-      {slotsActivos.map((slot, i) => (
-        <div key={i} className={CLASES_TAMANO[slot.tamano ?? "normal"]}>
-          <SlotGrafica slot={slot} fechas={fechas} />
-        </div>
-      ))}
-    </div>
+    <>
+      {Object.entries(reportesAgrupados).map(
+        ([categoria, reportes]) => (
+          <div key={categoria} className="mb-8">
+            <div className="mb-4 border-b pb-2">
+              <h2 className="text-2xl font-bold">
+                {categoria}
+              </h2>
+            </div>
+  
+            <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+              {reportes.map((slot, i) => (
+                <div
+                  key={`${categoria}-${i}`}
+                  className={
+                    CLASES_TAMANO[
+                      slot.tamano ?? "normal"
+                    ]
+                  }
+                >
+                  <SlotGrafica
+                    slot={slot}
+                    fechas={fechas}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      )}
+    </>
   );
 }

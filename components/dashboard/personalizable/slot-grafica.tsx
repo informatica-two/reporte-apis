@@ -107,10 +107,21 @@ export function SlotGrafica({ slot, fechas }: SlotGraficaProps) {
   return (
     <Card className="flex h-full flex-col overflow-hidden py-4">
       <CardHeader className="px-4 pb-2">
-        <CardTitle className="text-base">{slot.titulo}</CardTitle>
-        {slot.descripcion && (
-          <CardDescription className="text-xs">{slot.descripcion}</CardDescription>
-        )}
+      <CardTitle className="text-base">
+        {slot.titulo}
+      </CardTitle>
+
+      {slot.descripcion && (
+        <CardDescription className="text-xs">
+          {slot.descripcion}
+        </CardDescription>
+      )}
+
+      {slot.leyenda && (
+        <p className="w-5xl col-start-2 row-span-2 row-start-1 self-start justify-self-end flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs bg-muted text-muted-foreground">
+          {slot.leyenda}
+        </p>
+      )}
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-3 px-4 pt-0">
         {renderContenido()}
