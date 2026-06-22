@@ -12,8 +12,8 @@ export function formatRatio(n: number): string {
 
 export function getVentasVsCobrosChartData(kpis: ReporteKpis): VentasVsCobrosBarItem[] {
   return [
-    { name: "Venta neta", valor: kpis.ventaNeta },
-    { name: "Cobro neto", valor: kpis.cobroNeto },
+    { name: "Venta Mes Anterior", valor: kpis.ventaNetaMesAnterior },
+    { name: "Cobro Mes Actual", valor: kpis.cobroNetoMesAnterior },
   ];
 }
 

@@ -20,6 +20,8 @@ export function calculateKpis(
     activoNeto: activos.activo_neto,
     cobroBruto: cobros.cobro_bruto,
     cobroNeto: cobros.cobro_neto,
+    cobroNetoMesAnterior: venta.cobrado,
+    ventaNetaMesAnterior: venta.venta_neta_nueva,
     ventaBruta: venta.venta_bruta,
     ventaNeta: venta.venta_neta,
     devoluciones,

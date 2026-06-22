@@ -62,7 +62,7 @@ export function VentasVsCobrosChart({ kpis }: VentasVsCobrosChartProps) {
       <CardHeader className="px-4 pb-2">
         <CardTitle className="text-base">Ventas vs Cobros</CardTitle>
         <CardDescription className="text-xs">
-          Venta neta vs cobro neto y ratio del período
+          Venta Mes anterior vs Cobro Mes actual y ratio del período
         </CardDescription>
         <CardAction
           className={cn(
@@ -79,7 +79,7 @@ export function VentasVsCobrosChart({ kpis }: VentasVsCobrosChartProps) {
         </CardAction>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-3 px-4 pt-0">
-        <ChartContainer config={chartConfig} className="h-[180px] w-full shrink-0">
+        <ChartContainer config={chartConfig} className="h-45 w-full shrink-0">
           <BarChart
             accessibilityLayer
             data={chartData}
@@ -122,9 +122,9 @@ export function VentasVsCobrosChart({ kpis }: VentasVsCobrosChartProps) {
               className="h-2.5 w-2.5 shrink-0 rounded-sm"
               style={{ backgroundColor: "var(--chart-1)" }}
             />
-            <span className="text-muted-foreground">Venta neta:</span>
+            <span className="text-muted-foreground">Venta Mes Anterior:</span>
             <span className="font-mono font-medium">
-              {formatMoney(kpis.ventaNeta)}
+              {formatMoney(kpis.ventaNetaMesAnterior)}
             </span>
           </div>
           <div className="flex items-center gap-1.5">
@@ -132,9 +132,9 @@ export function VentasVsCobrosChart({ kpis }: VentasVsCobrosChartProps) {
               className="h-2.5 w-2.5 shrink-0 rounded-sm"
               style={{ backgroundColor: "var(--chart-2)" }}
             />
-            <span className="text-muted-foreground">Cobro neto:</span>
+            <span className="text-muted-foreground">Cobro Mes Actual:</span>
             <span className="font-mono font-medium">
-              {formatMoney(kpis.cobroNeto)}
+              {formatMoney(kpis.cobroNetoMesAnterior)}
             </span>
           </div>
         </div>

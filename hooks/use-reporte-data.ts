@@ -28,6 +28,8 @@ export type ReporteKpis = {
   ratioCobrosVentas: number;
   reclutamientosDia: number;
   dias: number;
+  cobroNetoMesAnterior: number;
+  ventaNetaMesAnterior: number;
 };
 
 type UseReporteDataOptions = {

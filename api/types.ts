@@ -109,6 +109,8 @@ export type VentaDetalle = {
   devoluciones_label: string;
   venta_neta_label: string;
   meta_ventas_label: string;
+  cobrado: number;
+  venta_neta_nueva: number;
 };
 
 /** Un dato del reporte por zona (venta/detalle_1) */
