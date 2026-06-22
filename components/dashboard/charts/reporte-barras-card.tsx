@@ -70,7 +70,7 @@ export function ReporteBarrasCard({
           {reporte?.titulo_reporte ?? tituloFallback}
         </CardTitle>
         <CardDescription className="text-xs">
-          Venta en el período · Total {formatMoney(total)}
+        {tituloFallback}, Venta en el período · {formatMoney(total)}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-4 px-4 pt-0">

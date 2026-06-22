@@ -11,7 +11,7 @@ export function ReportePorZonaCard({ reportePorZona }: ReportePorZonaCardProps) 
   return (
     <ReporteBarrasCard
       reporte={reportePorZona}
-      tituloFallback="Reporte por zona"
+      tituloFallback="Reporte por zona Top 10"
       columnaEtiqueta="Zona"
     />
   );

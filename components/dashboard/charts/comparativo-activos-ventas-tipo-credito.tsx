@@ -19,6 +19,7 @@ import type { ReportePorZonaDetalle } from "@/api/types";
 
 const TIPO_CREDITO_LABELS: Record<string, string> = {
   CRE_30: "Crédito 30",
+  CRE_60: "Crédito 60",
   CRE: "Crédito",
   CON: "Contado",
   EMP: "Empleados",

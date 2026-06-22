@@ -13,7 +13,7 @@ export function ReportePorImpulsadoraCard({
   return (
     <ReporteBarrasCard
       reporte={reportePorImpulsadora}
-      tituloFallback="Reporte por impulsadora"
+      tituloFallback="Reporte por impulsadora Top 10"
       columnaEtiqueta="Impulsadora"
     />
   );

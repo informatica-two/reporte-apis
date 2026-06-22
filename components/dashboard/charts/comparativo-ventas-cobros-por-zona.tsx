@@ -74,7 +74,7 @@ export function ComparativoVentasCobrosPorZona({
     <Card className="flex h-full flex-col gap-3 overflow-hidden py-4">
       <CardHeader className="px-4 pb-2">
         <CardTitle className="text-base">
-          Comparativo ventas vs cobros por zona
+          Top 10 Comparativo ventas vs cobros por zona
         </CardTitle>
         <CardDescription className="text-xs">
           Análisis comercial: zonas que venden mucho pero cobran poco.
