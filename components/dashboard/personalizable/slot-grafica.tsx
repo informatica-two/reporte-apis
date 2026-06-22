@@ -118,7 +118,7 @@ export function SlotGrafica({ slot, fechas }: SlotGraficaProps) {
       )}
 
       {slot.leyenda && (
-        <p className="w-2xl col-start-2 row-span-2 row-start-1 self-start justify-self-end flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs bg-muted text-muted-foreground">
+        <p className="w-1xl col-start-2 row-span-2 row-start-1 self-start justify-self-end rounded-md px-2 py-0.5 text-xs bg-muted text-muted-foreground whitespace-pre-line">
           {slot.leyenda}
         </p>
       )}

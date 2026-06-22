@@ -186,7 +186,9 @@ export const CONFIGURACION_DASHBOARD: SlotConfig[] = [
     categoria: "Ventas",
     titulo: "Reporte por Tipo de Compra",
     descripcion: "Distribución de ventas por tipo de compra",
-    leyenda: "ERP = compras registradas desde el sistema. Online = Tienda en Linea. Por Servicio: referencia a los códigos: 0101010102 0101010104 0101010105",
+    leyenda: `ERP = compras registradas desde el sistema
+    Online = Tienda en Línea.
+    Por Servicio: referencia a los códigos: 0101010102 0101010104 0101010105`,
     tipo: "barras",
     tamano: "completo",
     formatoValor: "moneda",
