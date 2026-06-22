@@ -29,7 +29,7 @@ export function SlotGrafica({ slot, fechas }: SlotGraficaProps) {
   function renderContenido() {
     if (estado === "loading" || estado === "idle") {
       return (
-        <div className="flex h-[220px] items-center justify-center">
+        <div className="flex h-55 items-center justify-center">
           <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
         </div>
       );
@@ -37,7 +37,7 @@ export function SlotGrafica({ slot, fechas }: SlotGraficaProps) {
 
     if (estado === "error") {
       return (
-        <div className="flex h-[220px] flex-col items-center justify-center gap-2 text-center">
+        <div className="flex h-55 flex-col items-center justify-center gap-2 text-center">
           <p className="text-sm text-destructive">{error}</p>
           <p className="text-xs text-muted-foreground">
             Revisa el endpoint en{" "}
@@ -51,7 +51,7 @@ export function SlotGrafica({ slot, fechas }: SlotGraficaProps) {
 
     if (!datos) {
       return (
-        <div className="flex h-[220px] items-center justify-center">
+        <div className="flex h-55 items-center justify-center">
           <p className="text-sm text-muted-foreground">Sin datos configurados</p>
         </div>
       );

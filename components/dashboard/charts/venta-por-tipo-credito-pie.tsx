@@ -78,7 +78,7 @@ export function VentaPorTipoCreditoPie({
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-4 px-4 pt-0">
-        <div className="h-[260px] w-full shrink-0">
+        <div className="h-65 w-full shrink-0">
           <ChartContainer config={chartConfig} className="h-full w-full">
             <PieChart>
               <ChartTooltip
