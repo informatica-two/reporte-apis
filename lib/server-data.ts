@@ -8,6 +8,7 @@ import {
   getVentaDetalle3,
   getVentaDetalle4,
   getVentaDetalle5,
+  getVentaDetalle6,
   getCobrosDetalle1,
   getCobrosDetalle2,
   getCobrosDetalle3,
@@ -20,7 +21,7 @@ import {
   getReclutamientosDetalle2,
   getReclutamientosDetalle4,
 } from "@/api/reporteVisual";
-import type { FechasParams, ReportePorZonaDetalle } from "@/api/types";
+import type { FechasParams, ReportePorZonaDetalle, VentaCobroPorZonaDetalle } from "@/api/types";
 import { getDefaultFechas as getDefaultFechasFromCalendar } from "@/lib/date-utils";
 import type { ReporteKpis } from "@/hooks/use-reporte-data";
 import { calculateKpis } from "./kpis-calculator";
@@ -88,8 +89,7 @@ export async function fetchKpisServer(
 }
 
 export type DashboardDetalles = {
-  ventaPorZona: ReportePorZonaDetalle | null;
-  cobrosPorZona: ReportePorZonaDetalle | null;
+  ventaCobroPorZona: VentaCobroPorZonaDetalle | null;
   activosPorTipoCredito: ReportePorZonaDetalle | null;
   ventaPorTipoCredito: ReportePorZonaDetalle | null;
 };
@@ -103,8 +103,7 @@ export async function fetchDashboardDetallesServer(
     if (shouldLogThis) {
       console.log("[Server] 📊 Fetching dashboard detalles:", {
         endpoints: [
-          "venta/detalle_1 (zona)",
-          "cobros/detalle_4 (zona)",
+          "venta/detalle_6 (venta vs cobro por zona)",
           "activos/detalle_2 (tipo crédito)",
           "venta/detalle_4 (tipo crédito)",
         ],
@@ -113,34 +112,28 @@ export async function fetchDashboardDetallesServer(
     }
     const startTime = performance.now();
 
-    const [ventaZonaRes, cobrosZonaRes, activosTipoRes, ventaTipoRes] =
+    const [ventaCobroZonaRes, activosTipoRes, ventaTipoRes] =
       await Promise.all([
-        getVentaDetalle1(fechas),
-        getCobrosDetalle4(fechas),
+        getVentaDetalle6(fechas),
         getActivosDetalle2(fechas),
         getVentaDetalle4(fechas),
-        getVentaDetalle5(fechas),
       ]);
 
     const duration = Math.round(performance.now() - startTime);
     if (shouldLogThis) console.log(`[Server] ✅ Dashboard detalles fetched in ${duration}ms`);
 
-    if (!ventaZonaRes.success) throw new Error(ventaZonaRes.error.message);
-    if (!cobrosZonaRes.success) throw new Error(cobrosZonaRes.error.message);
+    if (!ventaCobroZonaRes.success) throw new Error(ventaCobroZonaRes.error.message);
     if (!activosTipoRes.success) throw new Error(activosTipoRes.error.message);
     if (!ventaTipoRes.success) throw new Error(ventaTipoRes.error.message);
 
-    const ventaPorZona =
-      "data" in ventaZonaRes ? ventaZonaRes.data.detalle : null;
-    const cobrosPorZona =
-      "data" in cobrosZonaRes ? cobrosZonaRes.data.detalle : null;
+    const ventaCobroPorZona =
+      "data" in ventaCobroZonaRes ? ventaCobroZonaRes.data.detalle : null;
     const activosPorTipoCredito =
       "data" in activosTipoRes ? activosTipoRes.data.detalle : null;
     const ventaPorTipoCredito =
       "data" in ventaTipoRes ? ventaTipoRes.data.detalle : null;
 
-    if (!ventaPorZona?.datos) throw new Error("Datos venta por zona inválidos");
-    if (!cobrosPorZona?.datos) throw new Error("Datos cobros por zona inválidos");
+    if (!ventaCobroPorZona?.datos) throw new Error("Datos venta vs cobro por zona inválidos");
     if (!activosPorTipoCredito?.datos)
       throw new Error("Datos activos por tipo crédito inválidos");
     if (!ventaPorTipoCredito?.datos)
@@ -148,8 +141,7 @@ export async function fetchDashboardDetallesServer(
 
     return {
       data: {
-        ventaPorZona,
-        cobrosPorZona,
+        ventaCobroPorZona,
         activosPorTipoCredito,
         ventaPorTipoCredito,
       },

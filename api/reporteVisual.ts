@@ -7,6 +7,7 @@ import type {
   CobrosDetalle,
   VentaDetalle,
   ReportePorZonaDetalle,
+  VentaCobroPorZonaDetalle,
 } from "./types";
 import type { ApiResult } from "./types";
 import { validateFechasParams } from "./types";
@@ -148,6 +149,15 @@ export const getVentaDetalle4 =
   export const getVentaDetalle5 =
   createReporteFetcher<ReportePorZonaDetalle>(
     API_ENDPOINTS.reporteVisual.ventaDetalle5
+  );
+
+/**
+ * Obtiene el reporte de venta vs cobro por zona (venta/detalle_6) para el rango de fechas indicado.
+ * Incluye titulo_reporte y datos con Etiqueta (zona), venta_neta (facturado) y cobrado (recaudado).
+ */
+export const getVentaDetalle6 =
+  createReporteFetcher<VentaCobroPorZonaDetalle>(
+    API_ENDPOINTS.reporteVisual.ventaDetalle6
   );
 
 /**

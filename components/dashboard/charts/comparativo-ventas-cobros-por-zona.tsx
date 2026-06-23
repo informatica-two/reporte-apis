@@ -14,8 +14,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import { formatMoney, parseNumberLabel } from "@/lib/utils";
-import type { ReportePorZonaDetalle } from "@/api/types";
+import { formatMoney } from "@/lib/utils";
+import type { VentaCobroPorZonaDetalle } from "@/api/types";
 
 const chartConfig = {
   venta: {
@@ -29,37 +29,20 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 type ComparativoVentasCobrosPorZonaProps = {
-  ventaPorZona: ReportePorZonaDetalle | null;
-  cobrosPorZona: ReportePorZonaDetalle | null;
+  ventaCobroPorZona: VentaCobroPorZonaDetalle | null;
 };
 
 export function ComparativoVentasCobrosPorZona({
-  ventaPorZona,
-  cobrosPorZona,
+  ventaCobroPorZona,
 }: ComparativoVentasCobrosPorZonaProps) {
-  const ventaMap = new Map(
-    (ventaPorZona?.datos ?? []).map((d) => [
-      d.Etiqueta,
-      parseNumberLabel(d.Valor),
-    ])
-  );
-  const cobroMap = new Map(
-    (cobrosPorZona?.datos ?? []).map((d) => [
-      d.Etiqueta,
-      parseNumberLabel(d.Valor),
-    ])
-  );
+  const datos = ventaCobroPorZona?.datos ?? [];
 
-  const zonas = Array.from(
-    new Set([...ventaMap.keys(), ...cobroMap.keys()])
-  ).filter((z) => !z.includes("#EMP") && !z.includes("#OTR"));
-
-  const chartData = zonas
-    .map((zona) => ({
-      name: zona,
-      venta: ventaMap.get(zona) ?? 0,
-      cobro: cobroMap.get(zona) ?? 0,
-      diferencia: (ventaMap.get(zona) ?? 0) - (cobroMap.get(zona) ?? 0),
+  const chartData = datos
+    .map((d) => ({
+      name: d.Etiqueta,
+      venta: d.venta_neta,
+      cobro: d.cobrado,
+      diferencia: d.venta_neta - d.cobrado,
     }))
     .filter((d) => d.venta > 0 || d.cobro > 0)
     .sort((a, b) => b.venta - a.venta)
@@ -109,7 +92,7 @@ export function ComparativoVentasCobrosPorZona({
         </div>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-4 px-4 pt-0">
-        <div className="h-[300px] w-full shrink-0">
+        <div className="h-75 w-full shrink-0">
           <ChartContainer config={chartConfig} className="h-full w-full">
             <BarChart
               data={chartData}
@@ -155,7 +138,7 @@ export function ComparativoVentasCobrosPorZona({
           </ChartContainer>
         </div>
         <div className="rounded-lg border border-border/60 bg-muted/40 overflow-hidden">
-          <div className="max-h-[140px] overflow-y-auto">
+          <div className="max-h-35 overflow-y-auto">
             <table className="w-full text-xs">
               <thead className="sticky top-0 bg-muted/80 backdrop-blur">
                 <tr className="border-b border-border/60">

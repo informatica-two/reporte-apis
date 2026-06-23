@@ -125,3 +125,16 @@ export type ReportePorZonaDetalle = {
   datos: ReportePorZonaDato[];
 };
 
+/** Un dato del reporte venta vs cobro por zona (venta/detalle_6) */
+export type VentaCobroPorZonaDato = {
+  Etiqueta: string;
+  venta_neta: number;
+  cobrado: number;
+};
+
+/** Detalle del endpoint venta/detalle_6 — REPORTE POR VENTA·RECUPERACION POR ZONA */
+export type VentaCobroPorZonaDetalle = {
+  titulo_reporte: string;
+  datos: VentaCobroPorZonaDato[];
+};
+

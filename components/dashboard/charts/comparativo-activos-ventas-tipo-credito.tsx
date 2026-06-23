@@ -96,7 +96,7 @@ export function ComparativoActivosVentasTipoCredito({
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-4 px-4 pt-0">
-        <div className="h-[300px] w-full shrink-0">
+        <div className="h-75 w-full shrink-0">
           <ChartContainer config={chartConfig} className="h-full w-full">
             <BarChart
               data={chartData}
@@ -143,7 +143,7 @@ export function ComparativoActivosVentasTipoCredito({
           </ChartContainer>
         </div>
         <div className="rounded-lg border border-border/60 bg-muted/40 overflow-hidden">
-          <div className="max-h-[140px] overflow-y-auto">
+          <div className="max-h-35 overflow-y-auto">
             <table className="w-full text-xs">
               <thead className="sticky top-0 bg-muted/80 backdrop-blur">
                 <tr className="border-b border-border/60">

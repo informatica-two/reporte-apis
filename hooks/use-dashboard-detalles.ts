@@ -2,8 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import {
-  getVentaDetalle1,
-  getCobrosDetalle4,
+  getVentaDetalle6,
   getActivosDetalle2,
   getVentaDetalle4,
 } from "@/api/reporteVisual";
@@ -20,38 +19,32 @@ async function fetchDashboardDetalles(
   params: FechasParams,
   signal: AbortSignal
 ): Promise<DashboardDetalles> {
-  const [ventaZonaRes, cobrosZonaRes, activosTipoRes, ventaTipoRes] =
+  const [ventaCobroZonaRes, activosTipoRes, ventaTipoRes] =
     await Promise.all([
-      getVentaDetalle1(params, signal),
-      getCobrosDetalle4(params, signal),
+      getVentaDetalle6(params, signal),
       getActivosDetalle2(params, signal),
       getVentaDetalle4(params, signal),
     ]);
 
-  if (!ventaZonaRes.success) throw new Error(ventaZonaRes.error.message);
-  if (!cobrosZonaRes.success) throw new Error(cobrosZonaRes.error.message);
+  if (!ventaCobroZonaRes.success) throw new Error(ventaCobroZonaRes.error.message);
   if (!activosTipoRes.success) throw new Error(activosTipoRes.error.message);
   if (!ventaTipoRes.success) throw new Error(ventaTipoRes.error.message);
 
-  const ventaPorZona =
-    "data" in ventaZonaRes ? ventaZonaRes.data.detalle : null;
-  const cobrosPorZona =
-    "data" in cobrosZonaRes ? cobrosZonaRes.data.detalle : null;
+  const ventaCobroPorZona =
+    "data" in ventaCobroZonaRes ? ventaCobroZonaRes.data.detalle : null;
   const activosPorTipoCredito =
     "data" in activosTipoRes ? activosTipoRes.data.detalle : null;
   const ventaPorTipoCredito =
     "data" in ventaTipoRes ? ventaTipoRes.data.detalle : null;
 
-  if (!ventaPorZona?.datos) throw new Error("Datos venta por zona inválidos");
-  if (!cobrosPorZona?.datos) throw new Error("Datos cobros por zona inválidos");
+  if (!ventaCobroPorZona?.datos) throw new Error("Datos venta vs cobro por zona inválidos");
   if (!activosPorTipoCredito?.datos)
     throw new Error("Datos activos por tipo crédito inválidos");
   if (!ventaPorTipoCredito?.datos)
     throw new Error("Datos venta por tipo crédito inválidos");
 
   return {
-    ventaPorZona,
-    cobrosPorZona,
+    ventaCobroPorZona,
     activosPorTipoCredito,
     ventaPorTipoCredito,
   };
@@ -75,8 +68,7 @@ export function useDashboardDetalles(
   });
 
   return {
-    ventaPorZona: query.data?.ventaPorZona ?? null,
-    cobrosPorZona: query.data?.cobrosPorZona ?? null,
+    ventaCobroPorZona: query.data?.ventaCobroPorZona ?? null,
     activosPorTipoCredito: query.data?.activosPorTipoCredito ?? null,
     ventaPorTipoCredito: query.data?.ventaPorTipoCredito ?? null,
     state:

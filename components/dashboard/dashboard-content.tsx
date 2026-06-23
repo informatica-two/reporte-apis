@@ -44,8 +44,7 @@ export function DashboardContent({
   });
 
   const {
-    ventaPorZona,
-    cobrosPorZona,
+    ventaCobroPorZona,
     activosPorTipoCredito,
     ventaPorTipoCredito,
     state: detallesState,
@@ -57,8 +56,7 @@ export function DashboardContent({
   const displayError = error ?? initialError;
   const showComparativos =
     detallesState === "success" &&
-    ventaPorZona &&
-    cobrosPorZona &&
+    ventaCobroPorZona &&
     activosPorTipoCredito &&
     ventaPorTipoCredito;
 
@@ -94,8 +92,7 @@ export function DashboardContent({
             {showComparativos && (
               <div className="grid items-stretch gap-5 lg:grid-cols-2">
                 <ComparativoVentasCobrosPorZona
-                  ventaPorZona={ventaPorZona}
-                  cobrosPorZona={cobrosPorZona}
+                  ventaCobroPorZona={ventaCobroPorZona}
                 />
                 <ComparativoActivosVentasTipoCredito
                   activosPorTipoCredito={activosPorTipoCredito}
