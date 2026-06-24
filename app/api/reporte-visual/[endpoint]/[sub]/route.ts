@@ -17,6 +17,7 @@ const VALID_SUB_ENDPOINTS: [string, string][] = [
   ["venta", "detalle_3"],
   ["venta", "detalle_4"],
   ["venta", "detalle_5"],
+  ["venta", "detalle_6"],
   ["reclutamientos", "detalle_1"],
   ["reclutamientos", "detalle_2"],
   ["reclutamientos", "detalle_3"],
@@ -33,7 +34,7 @@ export async function POST(
   );
   if (!valid) {
     return NextResponse.json(
-      { success: false, detalle: "Endpoint inválido" },
+      { success: false, detalle: "Endpoint inválidosss" },
       { status: 400 }
     );
   }
