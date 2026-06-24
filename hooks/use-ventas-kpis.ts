@@ -36,11 +36,26 @@ type UseVentasKpisOptions = {
   initialDataUpdatedAt?: number;
 };
 
+function formatTipoCredito(nombre: string): string {
+  const tipos: Record<string, string> = {
+    CON: "Contado",
+    EMP: "Empleados",
+    CRE_30: "Crédito 30",
+    CRE_60: "Crédito 60",
+  };
+
+  return tipos[nombre] ?? nombre;
+}
+
 function getTopItem(reporte: ReportePorZonaDetalle | null): { nombre: string; valor: number } | null {
   if (!reporte || !reporte.datos || reporte.datos.length === 0) return null;
   
   const sorted = [...reporte.datos]
-    .map(d => ({ nombre: d.Etiqueta, valor: parseNumberLabel(d.Valor) }))
+    .map(d => ({
+      nombre: d.Etiqueta,
+      valor: parseNumberLabel(d.Valor),
+    }))
+    .filter(item => item.nombre?.trim().toLowerCase() !== "otras")
     .sort((a, b) => b.valor - a.valor);
   
   return sorted[0];
@@ -88,6 +103,10 @@ async function fetchVentasKpis(
   const ventaPromedioDia = v.dias > 0 ? v.venta_neta / v.dias : 0;
   const cumplimientoMeta = v.meta_diaria_mes > 0 ? (v.venta_neta / v.meta_diaria_mes) * 100 : 0;
 
+  const topTipoCredito = getTopItem(
+    detalles.reportePorTipoCredito ?? null
+  );
+
   return {
     ventaBruta: v.venta_bruta,
     ventaNeta: v.venta_neta,
@@ -98,10 +117,18 @@ async function fetchVentasKpis(
     metaMes: v.meta_diaria_mes,
     cumplimientoMeta,
     dias: v.dias,
+
     zonaTop: getTopItem(detalles.reportePorZona ?? null),
     impulsadoraTop: getTopItemVentaCobro(detalles.reportePorImpulsadora ?? null),
     lineaTop: getTopItem(detalles.reporteDetalle3 ?? null),
-    tipoCreditoTop: getTopItem(detalles.reportePorTipoCredito ?? null),
+
+    tipoCreditoTop: topTipoCredito
+      ? {
+          ...topTipoCredito,
+          nombre: formatTipoCredito(topTipoCredito.nombre),
+        }
+      : null,
+
     totalZonas: detalles.reportePorZona?.datos?.length ?? 0,
     totalImpulsadoras: detalles.reportePorImpulsadora?.datos?.length ?? 0,
     totalLineas: detalles.reporteDetalle3?.datos?.length ?? 0,

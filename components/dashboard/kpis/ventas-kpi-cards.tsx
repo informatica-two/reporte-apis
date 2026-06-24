@@ -179,7 +179,7 @@ export function VentasKpiCards({ kpis }: VentasKpiCardsProps) {
                     {formatMoney(kpis.zonaTop.valor)}
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {kpis.totalZonas} zonas activas
+                    {kpis.totalZonas} zonas en Top
                   </p>
                 </div>
               </div>
@@ -192,7 +192,7 @@ export function VentasKpiCards({ kpis }: VentasKpiCardsProps) {
                     <Award className="h-4 w-4 text-secondary-green" />
                   </div>
                   <span className="text-xs font-medium text-muted-foreground">
-                    Impulsadora
+                    División
                   </span>
                 </div>
                 <div>
@@ -203,7 +203,7 @@ export function VentasKpiCards({ kpis }: VentasKpiCardsProps) {
                     {formatMoney(kpis.impulsadoraTop.valor)}
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {kpis.totalImpulsadoras} impulsadoras
+                    {kpis.totalImpulsadoras} divisiones
                   </p>
                 </div>
               </div>
