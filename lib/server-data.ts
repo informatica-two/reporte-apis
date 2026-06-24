@@ -4,7 +4,7 @@ import {
   getVenta,
   getReclutamientos,
   getVentaDetalle1,
-  getVentaDetalle2,
+  getVentaDetalle7,
   getVentaDetalle3,
   getVentaDetalle4,
   getVentaDetalle5,
@@ -157,7 +157,7 @@ export async function fetchDashboardDetallesServer(
 
 export async function fetchVentaDetallesServer(fechas: FechasParams): Promise<{
   reportePorZona: ReportePorZonaDetalle | null;
-  reportePorImpulsadora: ReportePorZonaDetalle | null;
+  reportePorImpulsadora: VentaCobroPorZonaDetalle | null;
   reporteDetalle3: ReportePorZonaDetalle | null;
   reportePorTipoCredito: ReportePorZonaDetalle | null;
   ventaData: any | null;
@@ -185,7 +185,7 @@ export async function fetchVentaDetallesServer(fechas: FechasParams): Promise<{
     const [ventaRes, ventaDetalle1Res, ventaDetalle2Res, ventaDetalle3Res, ventaDetalle4Res] = await Promise.all([
       getVenta(fechas),
       getVentaDetalle1(fechas),
-      getVentaDetalle2(fechas),
+      getVentaDetalle7(fechas),
       getVentaDetalle3(fechas),
       getVentaDetalle4(fechas),
       getVentaDetalle5(fechas),

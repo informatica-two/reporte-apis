@@ -27,6 +27,7 @@ export const API_ENDPOINTS = {
     ventaDetalle4: "/reporte_visual/venta/detalle_4",
     ventaDetalle5: "/reporte_visual/venta/detalle_5",
     ventaDetalle6: "/reporte_visual/venta/detalle_6",
+    ventaDetalle7: "/reporte_visual/venta/detalle_7",
     reclutamientos: "/reporte_visual/reclutamientos",
     reclutamientosDetalle1: "/reporte_visual/reclutamientos/detalle_1",
     reclutamientosDetalle2: "/reporte_visual/reclutamientos/detalle_2",

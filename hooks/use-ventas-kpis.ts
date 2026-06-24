@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getVenta } from "@/api/reporteVisual";
-import type { FechasParams, ReportePorZonaDetalle } from "@/api/types";
+import type { FechasParams, ReportePorZonaDetalle, VentaCobroPorZonaDetalle } from "@/api/types";
 import { queryKeys } from "./query-keys";
 import { parseNumberLabel } from "@/lib/utils";
 
@@ -30,7 +30,7 @@ type UseVentasKpisOptions = {
   initialData?: VentasKpis | null;
   initialVentaData?: any | null;
   reportePorZona?: ReportePorZonaDetalle | null;
-  reportePorImpulsadora?: ReportePorZonaDetalle | null;
+  reportePorImpulsadora?: VentaCobroPorZonaDetalle | null;
   reporteDetalle3?: ReportePorZonaDetalle | null;
   reportePorTipoCredito?: ReportePorZonaDetalle | null;
   initialDataUpdatedAt?: number;
@@ -46,12 +46,27 @@ function getTopItem(reporte: ReportePorZonaDetalle | null): { nombre: string; va
   return sorted[0];
 }
 
+/**
+ * Igual que getTopItem pero para reportes con estructura venta_neta/cobrado
+ * (venta/detalle_6 y venta/detalle_7), que ya vienen como número y no como
+ * string formateado en "Valor".
+ */
+function getTopItemVentaCobro(reporte: VentaCobroPorZonaDetalle | null): { nombre: string; valor: number } | null {
+  if (!reporte || !reporte.datos || reporte.datos.length === 0) return null;
+
+  const sorted = [...reporte.datos]
+    .map(d => ({ nombre: d.Etiqueta, valor: d.venta_neta }))
+    .sort((a, b) => b.valor - a.valor);
+
+  return sorted[0];
+}
+
 async function fetchVentasKpis(
   params: FechasParams,
   signal: AbortSignal,
   detalles: {
     reportePorZona?: ReportePorZonaDetalle | null;
-    reportePorImpulsadora?: ReportePorZonaDetalle | null;
+    reportePorImpulsadora?: VentaCobroPorZonaDetalle | null;
     reporteDetalle3?: ReportePorZonaDetalle | null;
     reportePorTipoCredito?: ReportePorZonaDetalle | null;
   },
@@ -84,7 +99,7 @@ async function fetchVentasKpis(
     cumplimientoMeta,
     dias: v.dias,
     zonaTop: getTopItem(detalles.reportePorZona ?? null),
-    impulsadoraTop: getTopItem(detalles.reportePorImpulsadora ?? null),
+    impulsadoraTop: getTopItemVentaCobro(detalles.reportePorImpulsadora ?? null),
     lineaTop: getTopItem(detalles.reporteDetalle3 ?? null),
     tipoCreditoTop: getTopItem(detalles.reportePorTipoCredito ?? null),
     totalZonas: detalles.reportePorZona?.datos?.length ?? 0,

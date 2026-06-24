@@ -4,7 +4,7 @@ export {
   getCobros,
   getVenta,
   getVentaDetalle1,
-  getVentaDetalle2,
+  getVentaDetalle7,
   getReclutamientos,
 } from "./reporteVisual";
 export type {

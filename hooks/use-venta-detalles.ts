@@ -1,20 +1,20 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getVentaDetalle1, getVentaDetalle2, getVentaDetalle3, getVentaDetalle4 } from "@/api/reporteVisual";
-import type { FechasParams, ReportePorZonaDetalle } from "@/api/types";
+import { getVentaDetalle1, getVentaDetalle7, getVentaDetalle3, getVentaDetalle4 } from "@/api/reporteVisual";
+import type { FechasParams, ReportePorZonaDetalle, VentaCobroPorZonaDetalle } from "@/api/types";
 import { queryKeys } from "./query-keys";
 
 type VentaDetalles = {
   reportePorZona: ReportePorZonaDetalle | null;
-  reportePorImpulsadora: ReportePorZonaDetalle | null;
+  reportePorImpulsadora: VentaCobroPorZonaDetalle | null;
   reporteDetalle3: ReportePorZonaDetalle | null;
   reportePorTipoCredito: ReportePorZonaDetalle | null;
 };
 
 type UseVentaDetallesOptions = {
   initialReportePorZona?: ReportePorZonaDetalle | null;
-  initialReportePorImpulsadora?: ReportePorZonaDetalle | null;
+  initialReportePorImpulsadora?: VentaCobroPorZonaDetalle | null;
   initialReporteDetalle3?: ReportePorZonaDetalle | null;
   initialReportePorTipoCredito?: ReportePorZonaDetalle | null;
   initialDataUpdatedAt?: number;
@@ -26,7 +26,7 @@ async function fetchVentaDetalles(
 ): Promise<VentaDetalles> {
   const [ventaDetalle1Res, ventaDetalle2Res, ventaDetalle3Res, ventaDetalle4Res] = await Promise.all([
     getVentaDetalle1(params, signal),
-    getVentaDetalle2(params, signal),
+    getVentaDetalle7(params, signal),
     getVentaDetalle3(params, signal),
     getVentaDetalle4(params, signal),
   ]);

@@ -1,20 +1,20 @@
 "use client";
 
-import { ReporteBarrasCard } from "./reporte-barras-card";
-import type { ReportePorZonaDetalle } from "@/api/types";
+import { ReporteVentaCobroBarrasCard } from "./reporte-venta-cobro-barras-card";
+import type { VentaCobroPorZonaDetalle } from "@/api/types";
 
 type ReportePorImpulsadoraCardProps = {
-  reportePorImpulsadora: ReportePorZonaDetalle | null;
+  reportePorImpulsadora: VentaCobroPorZonaDetalle | null;
 };
 
 export function ReportePorImpulsadoraCard({
   reportePorImpulsadora,
 }: ReportePorImpulsadoraCardProps) {
   return (
-    <ReporteBarrasCard
+    <ReporteVentaCobroBarrasCard
       reporte={reportePorImpulsadora}
-      tituloFallback="Reporte por impulsadora Top 10"
-      columnaEtiqueta="Impulsadora"
+      tituloFallback="Reporte por venta y recuperación por división"
+      columnaEtiqueta="División"
     />
   );
 }

@@ -4,7 +4,7 @@ import * as React from "react";
 import { useVentaDetalles } from "@/hooks/use-venta-detalles";
 import { useVentasKpis } from "@/hooks/use-ventas-kpis";
 import { useFechasState } from "@/hooks/use-fechas-state";
-import type { ReportePorZonaDetalle, FechasParams } from "@/api/types";
+import type { ReportePorZonaDetalle, VentaCobroPorZonaDetalle, FechasParams } from "@/api/types";
 import { DashboardHeader } from "./dashboard-header";
 import { KpiQueryError } from "./kpi-query-error";
 import { ReportePorZonaCard } from "./charts/reporte-por-zona-card";
@@ -47,7 +47,7 @@ function ReporteBarrasCardSkeleton() {
 
 type VentasContentProps = {
   initialReportePorZona: ReportePorZonaDetalle | null;
-  initialReportePorImpulsadora: ReportePorZonaDetalle | null;
+  initialReportePorImpulsadora: VentaCobroPorZonaDetalle | null;
   initialReporteDetalle3: ReportePorZonaDetalle | null;
   initialReportePorTipoCredito: ReportePorZonaDetalle | null;
   initialVentaData: any | null;

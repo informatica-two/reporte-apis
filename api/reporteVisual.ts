@@ -161,6 +161,16 @@ export const getVentaDetalle6 =
   );
 
 /**
+ * Obtiene el reporte de venta vs cobro por división (venta/detalle_7) para el rango de fechas indicado.
+ * Incluye titulo_reporte y datos con Etiqueta (división), venta_neta (facturado) y cobrado (recaudado).
+ * Reemplaza al antiguo reporte por impulsadora en la vista de /ventas.
+ */
+export const getVentaDetalle7 =
+  createReporteFetcher<VentaCobroPorZonaDetalle>(
+    API_ENDPOINTS.reporteVisual.ventaDetalle7
+  );
+
+/**
  * Obtiene el reporte de cobros por medio (cobros/detalle_1) para el rango de fechas indicado.
  * Incluye titulo_reporte y datos con Etiqueta (medio) y Valor (monto).
  */
