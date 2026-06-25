@@ -26,7 +26,7 @@ function ReporteBarrasCardSkeleton() {
         <Skeleton className="mt-1 h-3 w-56" />
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-4 px-4 pt-0">
-        <Skeleton className="h-[280px] w-full shrink-0 rounded-lg" />
+        <Skeleton className="h-70 w-full shrink-0 rounded-lg" />
         <div className="rounded-lg border border-border/60 bg-muted/40 overflow-hidden">
           <div className="border-b border-border/60 bg-muted/80 px-3 py-2 flex gap-2">
             <Skeleton className="h-3 w-12" />
@@ -87,7 +87,7 @@ export function VentasContent({
     retry: retryKpis,
   } = useVentasKpis(fechas, {
     reportePorZona,
-    reportePorImpulsadora,
+    // reportePorImpulsadora,
     reporteDetalle3,
     reportePorTipoCredito,
     initialVentaData: isInitialFechas ? initialVentaData : undefined,
