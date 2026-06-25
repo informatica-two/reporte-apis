@@ -29,11 +29,11 @@ const TIPO_CREDITO_LABELS: Record<string, string> = {
 const chartConfig = {
   activosPct: {
     label: "Activos %",
-    color: "var(--chart-1)",
+    color: "var(--chart-3)",
   },
   ventaPct: {
     label: "Venta %",
-    color: "var(--chart-2)",
+    color: "var(--chart-4)",
   },
 } satisfies ChartConfig;
 
@@ -130,13 +130,13 @@ export function ComparativoActivosVentasTipoCredito({
               <Bar
                 dataKey="activosPct"
                 name="Activos %"
-                fill="var(--chart-1)"
+                fill="var(--chart-3)"
                 radius={[4, 4, 0, 0]}
               />
               <Bar
                 dataKey="ventaPct"
                 name="Venta %"
-                fill="var(--chart-2)"
+                fill="var(--chart-4)"
                 radius={[4, 4, 0, 0]}
               />
             </BarChart>
@@ -177,10 +177,10 @@ export function ComparativoActivosVentasTipoCredito({
                     <td className="px-3 py-1.5 text-right tabular-nums">
                       {formatMoney(d.venta)}
                     </td>
-                    <td className="px-3 py-1.5 text-right tabular-nums text-chart-1">
+                    <td className="px-3 py-1.5 text-right tabular-nums text-chart-3">
                       {d.activosPct.toFixed(1)}%
                     </td>
-                    <td className="px-3 py-1.5 text-right tabular-nums text-chart-2">
+                    <td className="px-3 py-1.5 text-right tabular-nums text-chart-4">
                       {d.ventaPct.toFixed(1)}%
                     </td>
                   </tr>

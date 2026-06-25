@@ -20,11 +20,11 @@ import type { VentaCobroPorDivisionDetalle } from "@/api/types";
 const chartConfig = {
   venta: {
     label: "Venta (facturado)",
-    color: "var(--chart-3)",
+    color: "var(--chart-1)",
   },
   cobro: {
     label: "Cobro (recaudado)",
-    color: "var(--chart-4)",
+    color: "var(--chart-2)",
   },
 } satisfies ChartConfig;
 
@@ -65,7 +65,7 @@ export function ComparativoVentasCobrosPorDivision({
           <span className="flex items-center gap-1.5">
             <span
               className="h-3 w-3 shrink-0 rounded-sm"
-              style={{ backgroundColor: "var(--chart-3)" }}
+              style={{ backgroundColor: "var(--chart-1)" }}
               aria-hidden
             />
             <span className="text-muted-foreground">
@@ -78,7 +78,7 @@ export function ComparativoVentasCobrosPorDivision({
           <span className="flex items-center gap-1.5">
             <span
               className="h-3 w-3 shrink-0 rounded-sm"
-              style={{ backgroundColor: "var(--chart-4)" }}
+              style={{ backgroundColor: "var(--chart-2)" }}
               aria-hidden
             />
             <span className="text-muted-foreground">
@@ -124,13 +124,13 @@ export function ComparativoVentasCobrosPorDivision({
               <Bar
                 dataKey="venta"
                 name="Venta (facturado)"
-                fill="var(--chart-3)"
+                fill="var(--chart-1)"
                 radius={[4, 4, 0, 0]}
               />
               <Bar
                 dataKey="cobro"
                 name="Cobro (recaudado)"
-                fill="var(--chart-4)"
+                fill="var(--chart-2)"
                 radius={[4, 4, 0, 0]}
               />
             </BarChart>

@@ -96,16 +96,16 @@ export function DashboardContent({
                 <ComparativoVentasCobrosPorZona
                   ventaCobroPorZona={ventaCobroPorZona}
                 />
-                <ComparativoActivosVentasTipoCredito
-                  activosPorTipoCredito={activosPorTipoCredito}
-                  ventaPorTipoCredito={ventaPorTipoCredito}
+                <ComparativoVentasCobrosPorDivision
+                  ventaCobroPorDivision={ventaCobroPorDivision}
                 />
               </div>
             )}
             {detallesState === "success" && ventaCobroPorDivision && (
               <div className="grid items-stretch gap-5 lg:grid-cols-2">
-                <ComparativoVentasCobrosPorDivision
-                  ventaCobroPorDivision={ventaCobroPorDivision}
+                <ComparativoActivosVentasTipoCredito
+                  activosPorTipoCredito={activosPorTipoCredito}
+                  ventaPorTipoCredito={ventaPorTipoCredito}
                 />
               </div>
             )}
