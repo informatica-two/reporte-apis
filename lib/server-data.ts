@@ -4,11 +4,13 @@ import {
   getVenta,
   getReclutamientos,
   getVentaDetalle1,
-  getVentaDetalle7,
+  getVentaDetalle2,
   getVentaDetalle3,
   getVentaDetalle4,
   getVentaDetalle5,
   getVentaDetalle6,
+  getVentaDetalle7,
+  getVentaDetalle8,
   getCobrosDetalle1,
   getCobrosDetalle2,
   getCobrosDetalle3,
@@ -21,7 +23,7 @@ import {
   getReclutamientosDetalle2,
   getReclutamientosDetalle4,
 } from "@/api/reporteVisual";
-import type { FechasParams, ReportePorZonaDetalle, VentaCobroPorZonaDetalle } from "@/api/types";
+import type { FechasParams, ReportePorZonaDetalle, VentaCobroPorZonaDetalle, VentaCobroPorDivisionDetalle, VentaPorDivisionDetalle } from "@/api/types";
 import { getDefaultFechas as getDefaultFechasFromCalendar } from "@/lib/date-utils";
 import type { ReporteKpis } from "@/hooks/use-reporte-data";
 import { calculateKpis } from "./kpis-calculator";
@@ -92,6 +94,7 @@ export type DashboardDetalles = {
   ventaCobroPorZona: VentaCobroPorZonaDetalle | null;
   activosPorTipoCredito: ReportePorZonaDetalle | null;
   ventaPorTipoCredito: ReportePorZonaDetalle | null;
+  ventaCobroPorDivision: VentaCobroPorDivisionDetalle | null;
 };
 
 export async function fetchDashboardDetallesServer(
@@ -106,17 +109,19 @@ export async function fetchDashboardDetallesServer(
           "venta/detalle_6 (venta vs cobro por zona)",
           "activos/detalle_2 (tipo crédito)",
           "venta/detalle_4 (tipo crédito)",
+          "venta/detalle_7 (venta vs cobro por division)",
         ],
         fechas,
       });
     }
     const startTime = performance.now();
 
-    const [ventaCobroZonaRes, activosTipoRes, ventaTipoRes] =
+    const [ventaCobroZonaRes, activosTipoRes, ventaTipoRes, ventaCobroDivisionRes] =
       await Promise.all([
         getVentaDetalle6(fechas),
         getActivosDetalle2(fechas),
         getVentaDetalle4(fechas),
+        getVentaDetalle7(fechas),
       ]);
 
     const duration = Math.round(performance.now() - startTime);
@@ -125,6 +130,7 @@ export async function fetchDashboardDetallesServer(
     if (!ventaCobroZonaRes.success) throw new Error(ventaCobroZonaRes.error.message);
     if (!activosTipoRes.success) throw new Error(activosTipoRes.error.message);
     if (!ventaTipoRes.success) throw new Error(ventaTipoRes.error.message);
+    if (!ventaCobroDivisionRes.success) throw new Error(ventaCobroDivisionRes.error.message);
 
     const ventaCobroPorZona =
       "data" in ventaCobroZonaRes ? ventaCobroZonaRes.data.detalle : null;
@@ -132,18 +138,23 @@ export async function fetchDashboardDetallesServer(
       "data" in activosTipoRes ? activosTipoRes.data.detalle : null;
     const ventaPorTipoCredito =
       "data" in ventaTipoRes ? ventaTipoRes.data.detalle : null;
+    const ventaCobroPorDivision =
+      "data" in ventaCobroDivisionRes ? ventaCobroDivisionRes.data.detalle : null;
 
     if (!ventaCobroPorZona?.datos) throw new Error("Datos venta vs cobro por zona inválidos");
     if (!activosPorTipoCredito?.datos)
       throw new Error("Datos activos por tipo crédito inválidos");
     if (!ventaPorTipoCredito?.datos)
       throw new Error("Datos venta por tipo crédito inválidos");
+    if (!ventaCobroPorDivision?.datos)
+      throw new Error("Datos venta vs cobro por división inválidos");
 
     return {
       data: {
         ventaCobroPorZona,
         activosPorTipoCredito,
         ventaPorTipoCredito,
+        ventaCobroPorDivision,
       },
       error: null,
     };
@@ -157,9 +168,10 @@ export async function fetchDashboardDetallesServer(
 
 export async function fetchVentaDetallesServer(fechas: FechasParams): Promise<{
   reportePorZona: ReportePorZonaDetalle | null;
-  reportePorImpulsadora: VentaCobroPorZonaDetalle | null;
+  reportePorImpulsadora: ReportePorZonaDetalle | null;
   reporteDetalle3: ReportePorZonaDetalle | null;
   reportePorTipoCredito: ReportePorZonaDetalle | null;
+  reporteVentaPorDivision: VentaPorDivisionDetalle | null;
   ventaData: any | null;
   error: string | null;
 }> {
@@ -182,13 +194,13 @@ export async function fetchVentaDetallesServer(fechas: FechasParams): Promise<{
     
     const startTime = performance.now();
     
-    const [ventaRes, ventaDetalle1Res, ventaDetalle2Res, ventaDetalle3Res, ventaDetalle4Res] = await Promise.all([
+    const [ventaRes, ventaDetalle1Res, ventaDetalle2Res, ventaDetalle3Res, ventaDetalle4Res, ventaDetalle8Res] = await Promise.all([
       getVenta(fechas),
       getVentaDetalle1(fechas),
-      getVentaDetalle7(fechas),
+      getVentaDetalle2(fechas),
       getVentaDetalle3(fechas),
       getVentaDetalle4(fechas),
-      getVentaDetalle5(fechas),
+      getVentaDetalle8(fechas),
     ]);
     
     const duration = Math.round(performance.now() - startTime);
@@ -210,12 +222,16 @@ export async function fetchVentaDetallesServer(fechas: FechasParams): Promise<{
     if (!ventaDetalle4Res.success) {
       throw new Error(ventaDetalle4Res.error.message);
     }
+    if (!ventaDetalle8Res.success) {
+      throw new Error(ventaDetalle8Res.error.message);
+    }
 
     const ventaData = "data" in ventaRes ? ventaRes.data.detalle : null;
     const reportePorZona = "data" in ventaDetalle1Res ? ventaDetalle1Res.data.detalle : null;
     const reportePorImpulsadora = "data" in ventaDetalle2Res ? ventaDetalle2Res.data.detalle : null;
     const reporteDetalle3 = "data" in ventaDetalle3Res ? ventaDetalle3Res.data.detalle : null;
     const reportePorTipoCredito = "data" in ventaDetalle4Res ? ventaDetalle4Res.data.detalle : null;
+    const reporteVentaPorDivision = "data" in ventaDetalle8Res ? ventaDetalle8Res.data.detalle : null;
 
     if (!ventaData) {
       throw new Error("Datos de venta principal inválidos");
@@ -232,14 +248,18 @@ export async function fetchVentaDetallesServer(fechas: FechasParams): Promise<{
     if (!reportePorTipoCredito || !Array.isArray(reportePorTipoCredito.datos)) {
       throw new Error("Datos de tipo de crédito inválidos");
     }
+    if (!reporteVentaPorDivision || !Array.isArray(reporteVentaPorDivision.datos)) {
+      throw new Error("Datos de venta por división inválidos");
+    }
 
-    return { reportePorZona, reportePorImpulsadora, reporteDetalle3, reportePorTipoCredito, ventaData, error: null };
+    return { reportePorZona, reportePorImpulsadora, reporteDetalle3, reportePorTipoCredito, reporteVentaPorDivision, ventaData, error: null };
   } catch (e) {
     return {
       reportePorZona: null,
       reportePorImpulsadora: null,
       reporteDetalle3: null,
       reportePorTipoCredito: null,
+      reporteVentaPorDivision: null,
       ventaData: null,
       error: e instanceof Error ? e.message : "Error al cargar datos",
     };

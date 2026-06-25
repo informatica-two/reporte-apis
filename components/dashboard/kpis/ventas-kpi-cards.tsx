@@ -200,7 +200,7 @@ export function VentasKpiCards({ kpis }: VentasKpiCardsProps) {
                     {kpis.impulsadoraTop.nombre}
                   </p>
                   <p className="text-sm font-semibold text-foreground">
-                    {formatMoney(kpis.impulsadoraTop.valor)}
+                    {/* {formatMoney(kpis.impulsadoraTop.valor)} */}
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
                     {kpis.totalImpulsadoras} divisiones

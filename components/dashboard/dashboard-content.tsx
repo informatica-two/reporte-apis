@@ -16,6 +16,7 @@ import { ComposicionCobrosChart } from "./charts/composicion-cobros-chart";
 import { ReclutamientosCard } from "./charts/reclutamientos-card";
 import { ComparativoVentasCobrosPorZona } from "./charts/comparativo-ventas-cobros-por-zona";
 import { ComparativoActivosVentasTipoCredito } from "./charts/comparativo-activos-ventas-tipo-credito";
+import { ComparativoVentasCobrosPorDivision } from "./charts/comparativo-ventas-cobros-por-division";
 import { ExportExcelButton } from "./export-excel-button";
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
@@ -47,6 +48,7 @@ export function DashboardContent({
     ventaCobroPorZona,
     activosPorTipoCredito,
     ventaPorTipoCredito,
+    ventaCobroPorDivision,
     state: detallesState,
   } = useDashboardDetalles(fechas, {
     initialData: isInitialFechas ? initialDashboardDetalles ?? undefined : undefined,
@@ -97,6 +99,13 @@ export function DashboardContent({
                 <ComparativoActivosVentasTipoCredito
                   activosPorTipoCredito={activosPorTipoCredito}
                   ventaPorTipoCredito={ventaPorTipoCredito}
+                />
+              </div>
+            )}
+            {detallesState === "success" && ventaCobroPorDivision && (
+              <div className="grid items-stretch gap-5 lg:grid-cols-2">
+                <ComparativoVentasCobrosPorDivision
+                  ventaCobroPorDivision={ventaCobroPorDivision}
                 />
               </div>
             )}

@@ -175,13 +175,34 @@ const etiquetasCompra: Record<string, string> = {
 
 export const CONFIGURACION_DASHBOARD: SlotConfig[] = [
   // ── SLOT 1 ──────────────────────────────────────────────────────────────────
-  // INSTRUCCIONES:
-  //   1. Cambia "titulo" por el nombre que quieres mostrar en la tarjeta
-  //   2. Elige el "tipo" de gráfica (barras, linea, pastel, area, cascada, tabla)
-  //   3. En "endpoint" pon la ruta de tu API
-  //   4. En "mapearDatos" explícale cómo leer la respuesta de tu API
-  //
-  
+
+  {
+    categoria: "Ventas",
+    titulo: "Reporte por Impulsadora",
+    descripcion: "Top impulsadoras por venta neta",
+    tipo: "barras",
+    tamano: "completo",
+    formatoValor: "moneda",
+    etiquetaValor: "Ventas",
+
+    endpoint: "/api/reporte-visual/venta/detalle_2",
+
+    mapearDatos: (respuesta) =>
+      (
+        respuesta as {
+          detalle: {
+            datos: Array<{
+              Etiqueta: string;
+              Valor: string;
+            }>;
+          };
+        }
+      ).detalle.datos.map((item) => ({
+        etiqueta: item.Etiqueta,
+        valor: Number(item.Valor),
+      })),
+  },
+
   {
     categoria: "Ventas",
     titulo: "Reporte por Tipo de Compra",

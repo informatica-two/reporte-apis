@@ -8,6 +8,8 @@ import type {
   VentaDetalle,
   ReportePorZonaDetalle,
   VentaCobroPorZonaDetalle,
+  VentaCobroPorDivisionDetalle,
+  VentaPorDivisionDetalle,
 } from "./types";
 import type { ApiResult } from "./types";
 import { validateFechasParams } from "./types";
@@ -161,13 +163,21 @@ export const getVentaDetalle6 =
   );
 
 /**
- * Obtiene el reporte de venta vs cobro por división (venta/detalle_7) para el rango de fechas indicado.
- * Incluye titulo_reporte y datos con Etiqueta (división), venta_neta (facturado) y cobrado (recaudado).
- * Reemplaza al antiguo reporte por impulsadora en la vista de /ventas.
+ * Obtiene el reporte de venta vs cobro por division (venta/detalle_7) para el rango de fechas indicado.
+ * Incluye titulo_reporte y datos con Etiqueta (division), venta_neta (facturado) y cobrado (recaudado).
  */
 export const getVentaDetalle7 =
-  createReporteFetcher<VentaCobroPorZonaDetalle>(
+  createReporteFetcher<VentaCobroPorDivisionDetalle>(
     API_ENDPOINTS.reporteVisual.ventaDetalle7
+  );
+
+/**
+ * Obtiene el reporte de venta por division (venta/detalle_8) para el rango de fechas indicado.
+ * Incluye titulo_reporte y datos con Etiqueta (division) y venta_neta (venta).
+ */
+export const getVentaDetalle8 =
+  createReporteFetcher<VentaPorDivisionDetalle>(
+    API_ENDPOINTS.reporteVisual.ventaDetalle8
   );
 
 /**

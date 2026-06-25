@@ -4,11 +4,12 @@ import * as React from "react";
 import { useVentaDetalles } from "@/hooks/use-venta-detalles";
 import { useVentasKpis } from "@/hooks/use-ventas-kpis";
 import { useFechasState } from "@/hooks/use-fechas-state";
-import type { ReportePorZonaDetalle, VentaCobroPorZonaDetalle, FechasParams } from "@/api/types";
+import type { ReportePorZonaDetalle, FechasParams } from "@/api/types";
+import type { VentaPorDivisionDetalle } from "@/api/types";
 import { DashboardHeader } from "./dashboard-header";
 import { KpiQueryError } from "./kpi-query-error";
 import { ReportePorZonaCard } from "./charts/reporte-por-zona-card";
-import { ReportePorImpulsadoraCard } from "./charts/reporte-por-impulsadora-card";
+import { VentaPorDivisionCard } from "./charts/venta-por-division-card";
 import { ReporteDetalle3Card } from "./charts/reporte-detalle3-card";
 import { VentaPorTipoCreditoPie } from "./charts/venta-por-tipo-credito-pie";
 import { VentasKpiCards } from "./kpis/ventas-kpi-cards";
@@ -47,9 +48,10 @@ function ReporteBarrasCardSkeleton() {
 
 type VentasContentProps = {
   initialReportePorZona: ReportePorZonaDetalle | null;
-  initialReportePorImpulsadora: VentaCobroPorZonaDetalle | null;
+  initialReportePorImpulsadora: ReportePorZonaDetalle | null;
   initialReporteDetalle3: ReportePorZonaDetalle | null;
   initialReportePorTipoCredito: ReportePorZonaDetalle | null;
+  initialReporteVentaPorDivision: VentaPorDivisionDetalle | null;
   initialVentaData: any | null;
   initialFechas: FechasParams;
   initialError: string | null;
@@ -60,6 +62,7 @@ export function VentasContent({
   initialReportePorImpulsadora,
   initialReporteDetalle3,
   initialReportePorTipoCredito,
+  initialReporteVentaPorDivision,
   initialVentaData,
   initialFechas,
   initialError,
@@ -67,12 +70,13 @@ export function VentasContent({
   const { fechas, isInitialFechas, initialDataTimestamp, onDateChange } = 
     useFechasState({ initialFechas });
   
-  const { reportePorZona, reportePorImpulsadora, reporteDetalle3, reportePorTipoCredito, state, error, retry } =
+  const { reportePorZona, reportePorImpulsadora, reporteDetalle3, reportePorTipoCredito, reporteVentaPorDivision, state, error, retry } =
     useVentaDetalles(fechas, {
       initialReportePorZona: isInitialFechas ? initialReportePorZona : undefined,
       initialReportePorImpulsadora: isInitialFechas ? initialReportePorImpulsadora : undefined,
       initialReporteDetalle3: isInitialFechas ? initialReporteDetalle3 : undefined,
       initialReportePorTipoCredito: isInitialFechas ? initialReportePorTipoCredito : undefined,
+      initialReporteVentaPorDivision: isInitialFechas ? initialReporteVentaPorDivision : undefined,
       initialDataUpdatedAt: isInitialFechas ? initialDataTimestamp : undefined,
     });
 
@@ -170,9 +174,7 @@ export function VentasContent({
             )}
             <div className="grid items-stretch gap-5 lg:grid-cols-2">
               <ReportePorZonaCard reportePorZona={reportePorZona} />
-              <ReportePorImpulsadoraCard
-                reportePorImpulsadora={reportePorImpulsadora}
-              />
+              <VentaPorDivisionCard reporteVentaPorDivision={reporteVentaPorDivision} />
               <ReporteDetalle3Card reporteDetalle3={reporteDetalle3} />
               <VentaPorTipoCreditoPie reportePorTipoCredito={reportePorTipoCredito} />
             </div>

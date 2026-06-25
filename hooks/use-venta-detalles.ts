@@ -1,22 +1,24 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getVentaDetalle1, getVentaDetalle7, getVentaDetalle3, getVentaDetalle4 } from "@/api/reporteVisual";
-import type { FechasParams, ReportePorZonaDetalle, VentaCobroPorZonaDetalle } from "@/api/types";
+import { getVentaDetalle1, getVentaDetalle2, getVentaDetalle3, getVentaDetalle4, getVentaDetalle8 } from "@/api/reporteVisual";
+import type { FechasParams, ReportePorZonaDetalle, VentaPorDivisionDetalle } from "@/api/types";
 import { queryKeys } from "./query-keys";
 
 type VentaDetalles = {
   reportePorZona: ReportePorZonaDetalle | null;
-  reportePorImpulsadora: VentaCobroPorZonaDetalle | null;
+  reportePorImpulsadora: ReportePorZonaDetalle | null;
   reporteDetalle3: ReportePorZonaDetalle | null;
   reportePorTipoCredito: ReportePorZonaDetalle | null;
+  reporteVentaPorDivision: VentaPorDivisionDetalle | null;
 };
 
 type UseVentaDetallesOptions = {
   initialReportePorZona?: ReportePorZonaDetalle | null;
-  initialReportePorImpulsadora?: VentaCobroPorZonaDetalle | null;
+  initialReportePorImpulsadora?: ReportePorZonaDetalle | null;
   initialReporteDetalle3?: ReportePorZonaDetalle | null;
   initialReportePorTipoCredito?: ReportePorZonaDetalle | null;
+  initialReporteVentaPorDivision?: VentaPorDivisionDetalle | null;
   initialDataUpdatedAt?: number;
 };
 
@@ -24,11 +26,12 @@ async function fetchVentaDetalles(
   params: FechasParams,
   signal: AbortSignal,
 ): Promise<VentaDetalles> {
-  const [ventaDetalle1Res, ventaDetalle2Res, ventaDetalle3Res, ventaDetalle4Res] = await Promise.all([
+  const [ventaDetalle1Res, ventaDetalle2Res, ventaDetalle3Res, ventaDetalle4Res, ventaDetalle8Res] = await Promise.all([
     getVentaDetalle1(params, signal),
-    getVentaDetalle7(params, signal),
+    getVentaDetalle2(params, signal),
     getVentaDetalle3(params, signal),
     getVentaDetalle4(params, signal),
+    getVentaDetalle8(params, signal),
   ]);
 
   if (!ventaDetalle1Res.success) {
@@ -43,6 +46,9 @@ async function fetchVentaDetalles(
   if (!ventaDetalle4Res.success) {
     throw new Error(ventaDetalle4Res.error.message);
   }
+  if (!ventaDetalle8Res.success) {
+    throw new Error(ventaDetalle8Res.error.message);
+  }
 
   const reportePorZona =
     "data" in ventaDetalle1Res ? ventaDetalle1Res.data.detalle : null;
@@ -52,6 +58,8 @@ async function fetchVentaDetalles(
     "data" in ventaDetalle3Res ? ventaDetalle3Res.data.detalle : null;
   const reportePorTipoCredito =
     "data" in ventaDetalle4Res ? ventaDetalle4Res.data.detalle : null;
+  const reporteVentaPorDivision =
+    "data" in ventaDetalle8Res ? ventaDetalle8Res.data.detalle : null;
 
   if (!reportePorZona || !Array.isArray(reportePorZona.datos)) {
     throw new Error("Datos de zona inválidos");
@@ -65,15 +73,18 @@ async function fetchVentaDetalles(
   if (!reportePorTipoCredito || !Array.isArray(reportePorTipoCredito.datos)) {
     throw new Error("Datos de tipo de crédito inválidos");
   }
+  if (!reporteVentaPorDivision || !Array.isArray(reporteVentaPorDivision.datos)) {
+    throw new Error("Datos de venta por división inválidos");
+  }
 
-  return { reportePorZona, reportePorImpulsadora, reporteDetalle3, reportePorTipoCredito };
+  return { reportePorZona, reportePorImpulsadora, reporteDetalle3, reportePorTipoCredito, reporteVentaPorDivision };
 }
 
 export function useVentaDetalles(
   fechas: FechasParams | null,
   options: UseVentaDetallesOptions = {},
 ) {
-  const { initialReportePorZona, initialReportePorImpulsadora, initialReporteDetalle3, initialReportePorTipoCredito } = options;
+  const { initialReportePorZona, initialReportePorImpulsadora, initialReporteDetalle3, initialReportePorTipoCredito, initialReporteVentaPorDivision } = options;
   const initialData =
     initialReportePorZona || initialReportePorImpulsadora || initialReporteDetalle3 || initialReportePorTipoCredito
       ? {
@@ -81,6 +92,7 @@ export function useVentaDetalles(
           reportePorImpulsadora: initialReportePorImpulsadora,
           reporteDetalle3: initialReporteDetalle3,
           reportePorTipoCredito: initialReportePorTipoCredito,
+          reporteVentaPorDivision: initialReporteVentaPorDivision ?? null,
         }
       : undefined;
 
@@ -102,6 +114,7 @@ export function useVentaDetalles(
     reportePorImpulsadora: query.data?.reportePorImpulsadora ?? null,
     reporteDetalle3: query.data?.reporteDetalle3 ?? null,
     reportePorTipoCredito: query.data?.reportePorTipoCredito ?? null,
+    reporteVentaPorDivision: query.data?.reporteVentaPorDivision ?? null,
     state: query.isFetching || query.isLoading
       ? "loading"
       : query.isError

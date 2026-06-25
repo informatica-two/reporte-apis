@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import {
   getVentaDetalle6,
+  getVentaDetalle7,
   getActivosDetalle2,
   getVentaDetalle4,
 } from "@/api/reporteVisual";
@@ -19,16 +20,18 @@ async function fetchDashboardDetalles(
   params: FechasParams,
   signal: AbortSignal
 ): Promise<DashboardDetalles> {
-  const [ventaCobroZonaRes, activosTipoRes, ventaTipoRes] =
+  const [ventaCobroZonaRes, activosTipoRes, ventaTipoRes, ventaCobroDivisionRes] =
     await Promise.all([
       getVentaDetalle6(params, signal),
       getActivosDetalle2(params, signal),
       getVentaDetalle4(params, signal),
+      getVentaDetalle7(params, signal),
     ]);
 
   if (!ventaCobroZonaRes.success) throw new Error(ventaCobroZonaRes.error.message);
   if (!activosTipoRes.success) throw new Error(activosTipoRes.error.message);
   if (!ventaTipoRes.success) throw new Error(ventaTipoRes.error.message);
+  if (!ventaCobroDivisionRes.success) throw new Error(ventaCobroDivisionRes.error.message);
 
   const ventaCobroPorZona =
     "data" in ventaCobroZonaRes ? ventaCobroZonaRes.data.detalle : null;
@@ -36,17 +39,22 @@ async function fetchDashboardDetalles(
     "data" in activosTipoRes ? activosTipoRes.data.detalle : null;
   const ventaPorTipoCredito =
     "data" in ventaTipoRes ? ventaTipoRes.data.detalle : null;
+  const ventaCobroPorDivision =
+    "data" in ventaCobroDivisionRes ? ventaCobroDivisionRes.data.detalle : null;
 
   if (!ventaCobroPorZona?.datos) throw new Error("Datos venta vs cobro por zona inválidos");
   if (!activosPorTipoCredito?.datos)
     throw new Error("Datos activos por tipo crédito inválidos");
   if (!ventaPorTipoCredito?.datos)
     throw new Error("Datos venta por tipo crédito inválidos");
+  if (!ventaCobroPorDivision?.datos)
+    throw new Error("Datos venta vs cobro por división inválidos");
 
   return {
     ventaCobroPorZona,
     activosPorTipoCredito,
     ventaPorTipoCredito,
+    ventaCobroPorDivision,
   };
 }
 
@@ -71,6 +79,7 @@ export function useDashboardDetalles(
     ventaCobroPorZona: query.data?.ventaCobroPorZona ?? null,
     activosPorTipoCredito: query.data?.activosPorTipoCredito ?? null,
     ventaPorTipoCredito: query.data?.ventaPorTipoCredito ?? null,
+    ventaCobroPorDivision: query.data?.ventaCobroPorDivision ?? null,
     state:
       query.isFetching || query.isLoading
         ? "loading"

@@ -138,3 +138,28 @@ export type VentaCobroPorZonaDetalle = {
   datos: VentaCobroPorZonaDato[];
 };
 
+/** Un dato del reporte venta vs cobro por division (venta/detalle_7) */
+export type VentaCobroPorDivisionDato = {
+  Etiqueta: string;
+  venta_neta: number;
+  cobrado: number;
+};
+
+/** Detalle del endpoint venta/detalle_7 — REPORTE POR VENTA·RECUPERACION POR DIVISION */
+export type VentaCobroPorDivisionDetalle = {
+  titulo_reporte: string;
+  datos: VentaCobroPorDivisionDato[];
+};
+
+/** Un dato del reporte venta por division (venta/detalle_8) */
+export type VentaPorDivisionDato = {
+  Etiqueta: string;
+  venta_neta: number;
+};
+
+/** Detalle del endpoint venta/detalle_8 — REPORTE POR VENTA POR DIVISION */
+export type VentaPorDivisionDetalle = {
+  titulo_reporte: string;
+  datos: VentaPorDivisionDato[];
+};
+
