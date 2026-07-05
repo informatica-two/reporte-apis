@@ -19,6 +19,7 @@ const VALID_SUB_ENDPOINTS: [string, string][] = [
   ["venta", "detalle_5"],
   ["venta", "detalle_6"],
   ["venta", "detalle_7"],
+  ["venta", "detalle_8"],
   ["reclutamientos", "detalle_1"],
   ["reclutamientos", "detalle_2"],
   ["reclutamientos", "detalle_3"],
