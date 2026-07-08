@@ -3,7 +3,7 @@ import { CobrosContent } from "@/components/dashboard/cobros-content";
 
 export default async function CobrosPage() {
   const initialFechas = getDefaultFechas();
-  const { reportePorMedio, reportePorTipoDocumento, reportePorMunicipio, reportePorZona, cobrosData, error } =
+  const { reportePorMedio, reportePorTipoDocumento, reportePorMunicipio, reportePorZona, cobrosData, ventaData, error } =
     await fetchCobrosDetallesServer(initialFechas);
 
   return (
@@ -13,6 +13,7 @@ export default async function CobrosPage() {
       initialReportePorMunicipio={reportePorMunicipio}
       initialReportePorZona={reportePorZona}
       initialCobrosData={cobrosData}
+      initialVentaData={ventaData}
       initialFechas={initialFechas}
       initialError={error}
     />

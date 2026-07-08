@@ -272,6 +272,7 @@ export async function fetchCobrosDetallesServer(fechas: FechasParams): Promise<{
   reportePorMunicipio: ReportePorZonaDetalle | null;
   reportePorZona: ReportePorZonaDetalle | null;
   cobrosData: any | null;
+  ventaData: any | null;
   error: string | null;
 }> {
   try {
@@ -285,7 +286,8 @@ export async function fetchCobrosDetallesServer(fechas: FechasParams): Promise<{
           'cobros/detalle_1 (medio)',
           'cobros/detalle_2 (tipo documento)',
           'cobros/detalle_3 (municipio)',
-          'cobros/detalle_4 (zona)'
+          'cobros/detalle_4 (zona)',
+          'venta (principal, para venta mes anterior / cobro mes actual)'
         ],
         fechas
       });
@@ -293,12 +295,13 @@ export async function fetchCobrosDetallesServer(fechas: FechasParams): Promise<{
     
     const startTime = performance.now();
     
-    const [cobrosRes, cobrosDetalle1Res, cobrosDetalle2Res, cobrosDetalle3Res, cobrosDetalle4Res] = await Promise.all([
+    const [cobrosRes, cobrosDetalle1Res, cobrosDetalle2Res, cobrosDetalle3Res, cobrosDetalle4Res, ventaRes] = await Promise.all([
       getCobros(fechas),
       getCobrosDetalle1(fechas),
       getCobrosDetalle2(fechas),
       getCobrosDetalle3(fechas),
       getCobrosDetalle4(fechas),
+      getVenta(fechas),
     ]);
     
     const duration = Math.round(performance.now() - startTime);
@@ -320,12 +323,16 @@ export async function fetchCobrosDetallesServer(fechas: FechasParams): Promise<{
     if (!cobrosDetalle4Res.success) {
       throw new Error(cobrosDetalle4Res.error.message);
     }
+    if (!ventaRes.success) {
+      throw new Error(ventaRes.error.message);
+    }
 
     const cobrosData = "data" in cobrosRes ? cobrosRes.data.detalle : null;
     const reportePorMedio = "data" in cobrosDetalle1Res ? cobrosDetalle1Res.data.detalle : null;
     const reportePorTipoDocumento = "data" in cobrosDetalle2Res ? cobrosDetalle2Res.data.detalle : null;
     const reportePorMunicipio = "data" in cobrosDetalle3Res ? cobrosDetalle3Res.data.detalle : null;
     const reportePorZona = "data" in cobrosDetalle4Res ? cobrosDetalle4Res.data.detalle : null;
+    const ventaData = "data" in ventaRes ? ventaRes.data.detalle : null;
 
     if (!cobrosData) {
       throw new Error("Datos de cobros principal inválidos");
@@ -342,8 +349,11 @@ export async function fetchCobrosDetallesServer(fechas: FechasParams): Promise<{
     if (!reportePorZona || !Array.isArray(reportePorZona.datos)) {
       throw new Error("Datos de zona inválidos");
     }
+    if (!ventaData) {
+      throw new Error("Datos de venta inválidos");
+    }
 
-    return { reportePorMedio, reportePorTipoDocumento, reportePorMunicipio, reportePorZona, cobrosData, error: null };
+    return { reportePorMedio, reportePorTipoDocumento, reportePorMunicipio, reportePorZona, cobrosData, ventaData, error: null };
   } catch (e) {
     return {
       reportePorMedio: null,
@@ -351,6 +361,7 @@ export async function fetchCobrosDetallesServer(fechas: FechasParams): Promise<{
       reportePorMunicipio: null,
       reportePorZona: null,
       cobrosData: null,
+      ventaData: null,
       error: e instanceof Error ? e.message : "Error al cargar datos",
     };
   }

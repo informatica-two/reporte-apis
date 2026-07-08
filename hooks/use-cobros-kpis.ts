@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getCobros } from "@/api/reporteVisual";
+import { getCobros, getVenta } from "@/api/reporteVisual";
 import type { FechasParams, ReportePorZonaDetalle } from "@/api/types";
 import { queryKeys } from "./query-keys";
 import { parseNumberLabel } from "@/lib/utils";
@@ -9,6 +9,11 @@ import { parseNumberLabel } from "@/lib/utils";
 export type CobrosKpis = {
   cobroBruto: number;
   cobroNeto: number;
+  // Cobrado del mes actual correspondiente a lo vendido el mes anterior
+  // (mismo dato que se muestra en el reporte "Ventas vs Cobros" del inicio:
+  // "Venta Mes Anterior" / "Cobro Mes Actual").
+  cobroNetoMesAnterior: number;
+  ventaNetaMesAnterior: number;
   anulaciones: number;
   pctAnulaciones: number;
   cobroPromedioDia: number;
@@ -29,6 +34,7 @@ export type CobrosKpis = {
 type UseCobrosKpisOptions = {
   initialData?: CobrosKpis | null;
   initialCobrosData?: any | null;
+  initialVentaData?: any | null;
   reportePorMedio?: ReportePorZonaDetalle | null;
   reportePorTipoDocumento?: ReportePorZonaDetalle | null;
   reportePorMunicipio?: ReportePorZonaDetalle | null;
@@ -55,18 +61,34 @@ async function fetchCobrosKpis(
     reportePorMunicipio?: ReportePorZonaDetalle | null;
     reportePorZona?: ReportePorZonaDetalle | null;
   },
-  initialCobrosData?: any | null
+  initialCobrosData?: any | null,
+  initialVentaData?: any | null
 ): Promise<CobrosKpis> {
   let c = initialCobrosData;
-  
-  // Si no hay datos iniciales, hacer fetch
-  if (!c) {
+  let v = initialVentaData;
+
+  // Si no hay datos iniciales, hacer fetch (en paralelo si faltan ambos)
+  if (!c && !v) {
+    const [cobrosRes, ventaRes] = await Promise.all([
+      getCobros(params, signal),
+      getVenta(params, signal),
+    ]);
+    if (!cobrosRes.success) throw new Error(cobrosRes.error.message);
+    if (!ventaRes.success) throw new Error(ventaRes.error.message);
+    c = "data" in cobrosRes ? cobrosRes.data.detalle : null;
+    v = "data" in ventaRes ? ventaRes.data.detalle : null;
+  } else if (!c) {
     const cobrosRes = await getCobros(params, signal);
     if (!cobrosRes.success) throw new Error(cobrosRes.error.message);
     c = "data" in cobrosRes ? cobrosRes.data.detalle : null;
+  } else if (!v) {
+    const ventaRes = await getVenta(params, signal);
+    if (!ventaRes.success) throw new Error(ventaRes.error.message);
+    v = "data" in ventaRes ? ventaRes.data.detalle : null;
   }
-  
+
   if (!c) throw new Error("Datos de cobros incompletos");
+  if (!v) throw new Error("Datos de venta incompletos");
 
   const anulaciones = c.cobro_bruto - c.cobro_neto;
   const pctAnulaciones = c.cobro_bruto > 0 ? (anulaciones / c.cobro_bruto) * 100 : 0;
@@ -76,6 +98,8 @@ async function fetchCobrosKpis(
   return {
     cobroBruto: c.cobro_bruto,
     cobroNeto: c.cobro_neto,
+    cobroNetoMesAnterior: v.cobrado,
+    ventaNetaMesAnterior: v.venta_neta_nueva,
     anulaciones,
     pctAnulaciones,
     cobroPromedioDia,
@@ -101,6 +125,7 @@ export function useCobrosKpis(
   const { 
     initialData,
     initialCobrosData,
+    initialVentaData,
     reportePorMedio,
     reportePorTipoDocumento,
     reportePorMunicipio,
@@ -116,7 +141,7 @@ export function useCobrosKpis(
         reportePorTipoDocumento,
         reportePorMunicipio,
         reportePorZona,
-      }, initialCobrosData);
+      }, initialCobrosData, initialVentaData);
     },
     enabled: !!fechas,
     initialData: initialData ?? undefined,

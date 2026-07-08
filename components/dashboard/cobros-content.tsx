@@ -54,6 +54,7 @@ type CobrosContentProps = {
   initialReportePorMunicipio: ReportePorZonaDetalle | null;
   initialReportePorZona: ReportePorZonaDetalle | null;
   initialCobrosData: any | null;
+  initialVentaData?: any | null;
   initialFechas: FechasParams;
   initialError: string | null;
 };
@@ -64,6 +65,7 @@ export function CobrosContent({
   initialReportePorMunicipio,
   initialReportePorZona,
   initialCobrosData,
+  initialVentaData,
   initialFechas,
   initialError,
 }: CobrosContentProps) {
@@ -90,6 +92,7 @@ export function CobrosContent({
     reportePorMunicipio,
     reportePorZona,
     initialCobrosData: isInitialFechas ? initialCobrosData : undefined,
+    initialVentaData: isInitialFechas ? initialVentaData : undefined,
     initialDataUpdatedAt: isInitialFechas ? initialDataTimestamp : undefined,
   });
 

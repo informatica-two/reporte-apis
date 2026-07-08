@@ -16,13 +16,19 @@ type AnalisisEficienciaCobrosProps = {
 };
 
 export function AnalisisEficienciaCobros({ kpis }: AnalisisEficienciaCobrosProps) {
-  const tasaEfectividad = kpis.cobroBruto > 0 ? (kpis.cobroNeto / kpis.cobroBruto) * 100 : 0;
-  const brechaMeta = kpis.metaMes - kpis.cobroNeto;
+  // Venta del mes anterior y cobro del mes actual (mismo dato que "Ventas vs Cobros" en el inicio:
+  // "Venta Mes Anterior" / "Cobro Mes Actual").
+  const ventaMesAnterior = kpis.ventaNetaMesAnterior;
+  const cobroMesActual = kpis.cobroNetoMesAnterior;
+
+  const tasaEfectividad = ventaMesAnterior > 0 ? (cobroMesActual / ventaMesAnterior) * 100 : 0;
+  const brechaMeta = kpis.ventaNetaMesAnterior - kpis.cobroNetoMesAnterior;
   const diasRestantes = kpis.dias > 0 ? Math.max(0, 30 - kpis.dias) : 0;
   const cobroDiarioNecesario = diasRestantes > 0 ? brechaMeta / diasRestantes : 0;
   const ritmoActual = kpis.cobroPromedioDia;
-  const proyeccionFinal = kpis.cobroNeto + (ritmoActual * diasRestantes);
+  const proyeccionFinal = cobroMesActual + (ritmoActual * diasRestantes);
   const alcanzaraMeta = proyeccionFinal >= kpis.metaMes;
+  const cumplimientoMeta = kpis.metaMes > 0 ? (cobroMesActual / kpis.metaMes) * 100 : 0;
 
   return (
     <Card>
@@ -56,7 +62,7 @@ export function AnalisisEficienciaCobros({ kpis }: AnalisisEficienciaCobrosProps
             </div>
           </div>
           <p className="text-xs text-muted-foreground mt-2">
-            De cada {formatMoney(kpis.cobroBruto)} bruto, se cobran efectivamente {formatMoney(kpis.cobroNeto)}
+            De {formatMoney(ventaMesAnterior)} vendido el mes anterior, se cobran efectivamente {formatMoney(cobroMesActual)} este mes
           </p>
         </div>
 
@@ -150,7 +156,7 @@ export function AnalisisEficienciaCobros({ kpis }: AnalisisEficienciaCobrosProps
                   Meta alcanzada
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Se superó la meta en {formatMoney(Math.abs(brechaMeta))} ({formatPercent(kpis.cumplimientoMeta - 100)} adicional)
+                  Se superó la meta en {formatMoney(Math.abs(brechaMeta))} ({formatPercent(cumplimientoMeta - 100)} adicional)
                 </p>
               </div>
             </div>
