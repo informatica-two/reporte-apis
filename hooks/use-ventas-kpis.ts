@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getVenta } from "@/api/reporteVisual";
 import type { FechasParams, ReportePorZonaDetalle, VentaCobroPorZonaDetalle } from "@/api/types";
 import { queryKeys } from "./query-keys";
-import { parseNumberLabel } from "@/lib/utils";
+import { esEtiquetaOtros, parseNumberLabel } from "@/lib/utils";
 
 export type VentasKpis = {
   ventaBruta: number;
@@ -55,7 +55,7 @@ function getTopItem(reporte: ReportePorZonaDetalle | null): { nombre: string; va
       nombre: d.Etiqueta,
       valor: parseNumberLabel(d.Valor),
     }))
-    .filter(item => item.nombre?.trim().toLowerCase() !== "otras")
+    .filter(item => !esEtiquetaOtros(item.nombre))
     .sort((a, b) => b.valor - a.valor);
   
   return sorted[0];

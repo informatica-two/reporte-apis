@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Cell, Pie, PieChart } from "recharts";
-import { formatMoney, parseNumberLabel } from "@/lib/utils";
+import { esEtiquetaOtros, formatMoney, parseNumberLabel } from "@/lib/utils";
 import type { ReportePorZonaDetalle } from "@/api/types";
 import { CreditCard } from "lucide-react";
 
@@ -57,7 +57,7 @@ export function VentaPorTipoCreditoPie({
       value: parseNumberLabel(d.Valor),
       fill: CREDITO_COLORS[i % CREDITO_COLORS.length],
     }))
-    .filter((d) => d.value > 0)
+    .filter((d) => d.value > 0 && !esEtiquetaOtros(d.name))
     .sort((a, b) => b.value - a.value);
 
   const total = chartData.reduce((s, d) => s + d.value, 0);

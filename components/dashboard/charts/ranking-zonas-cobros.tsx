@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { formatMoney, parseNumberLabel } from "@/lib/utils";
+import { esEtiquetaOtros, formatMoney, parseNumberLabel } from "@/lib/utils";
 import type { ReportePorZonaDetalle } from "@/api/types";
 import { TrendingUp, TrendingDown, Trophy, AlertTriangle } from "lucide-react";
 
@@ -22,7 +22,7 @@ export function RankingZonasCobros({ reportePorZona }: RankingZonasCobrosProps) 
       name: d.Etiqueta,
       value: parseNumberLabel(d.Valor),
     }))
-    .filter(d => !d.name.includes("#OTR") && !d.name.includes("#EMP"))
+    .filter(d => !esEtiquetaOtros(d.name) && !d.name.includes("#EMP"))
     .sort((a, b) => b.value - a.value);
 
   const top5 = sorted.slice(0, 5);

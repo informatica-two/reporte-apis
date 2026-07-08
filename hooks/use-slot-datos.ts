@@ -3,6 +3,12 @@
 import * as React from "react";
 import type { DatoGrafica, FilaTabla, SlotConfig } from "@/config/dashboard-personalizable";
 import type { FechasParams } from "@/api/types";
+import { filtrarDatosOtros } from "@/lib/utils";
+
+/** Quita del arreglo de una gráfica cualquier punto/etiqueta "Otros"/"Otras". */
+function filtrarOtrosDeGrafica(datos: DatoGrafica[]): DatoGrafica[] {
+  return filtrarDatosOtros(datos, (item) => item.etiqueta);
+}
 
 export type EstadoSlot = "idle" | "loading" | "success" | "error";
 
@@ -41,7 +47,10 @@ export function useSlotDatos(
         const estaticos = slot.datosEstaticos as { columnas: string[]; filas: FilaTabla[] };
         setDatos({ tipo: "tabla", columnas: estaticos.columnas, filas: estaticos.filas });
       } else {
-        setDatos({ tipo: "grafica", datos: slot.datosEstaticos as DatoGrafica[] });
+        setDatos({
+          tipo: "grafica",
+          datos: filtrarOtrosDeGrafica(slot.datosEstaticos as DatoGrafica[]),
+        });
       }
       setEstado("success");
       return;
@@ -83,10 +92,16 @@ export function useSlotDatos(
             const columnas = filas.length > 0 ? Object.keys(filas[0]) : [];
             setDatos({ tipo: "tabla", columnas, filas });
           } else {
-            setDatos({ tipo: "grafica", datos: datosMapeados as DatoGrafica[] });
+            setDatos({
+              tipo: "grafica",
+              datos: filtrarOtrosDeGrafica(datosMapeados as DatoGrafica[]),
+            });
           }
         } else if (Array.isArray(respuestaApi)) {
-          setDatos({ tipo: "grafica", datos: respuestaApi as DatoGrafica[] });
+          setDatos({
+            tipo: "grafica",
+            datos: filtrarOtrosDeGrafica(respuestaApi as DatoGrafica[]),
+          });
         } else {
           throw new Error(
             "La respuesta de la API no es un arreglo. Define mapearDatos en tu configuración."

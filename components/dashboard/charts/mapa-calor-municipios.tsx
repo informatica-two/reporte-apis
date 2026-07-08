@@ -7,10 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { formatMoney } from "@/lib/utils";
+import { cn, esEtiquetaOtros, formatMoney } from "@/lib/utils";
 import type { VentaCobroPorZonaDetalle } from "@/api/types";
 import { MapPin, Flame } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 type MapaCalorMunicipiosProps = {
   ventaCobroPorZona: VentaCobroPorZonaDetalle | null;
@@ -34,7 +33,7 @@ export function MapaCalorMunicipios({ ventaCobroPorZona }: MapaCalorMunicipiosPr
       const pct = venta > 0 ? (cobro / venta) * 100 : null;
       return { name: d.Etiqueta, venta, cobro, pct };
     })
-    .filter((d) => d.name && !d.name.includes("#OTR") && !d.name.includes("#EMP"))
+    .filter((d) => d.name && !esEtiquetaOtros(d.name) && !d.name.includes("#EMP"))
     .filter((d) => d.venta > 0 || d.cobro > 0);
 
   // Las zonas con % calculable van primero, ordenadas de mejor a peor.

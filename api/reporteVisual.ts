@@ -13,6 +13,32 @@ import type {
 } from "./types";
 import type { ApiResult } from "./types";
 import { validateFechasParams } from "./types";
+import { esEtiquetaOtros } from "@/lib/utils";
+
+/**
+ * Elimina de cualquier respuesta de reporte_visual los elementos de
+ * `detalle.datos` cuya Etiqueta sea "Otros"/"Otras". Se aplica de forma
+ * genérica aquí para que TODOS los KPIs y TODAS las gráficas que consumen
+ * estos endpoints (dashboard, ventas, cobros, activos, reclutamientos y el
+ * dashboard personalizable) queden cubiertos desde un único punto.
+ */
+function ocultarOtrosDeRespuesta<T>(data: ReporteVisualResponse<T>): ReporteVisualResponse<T> {
+  const detalle = data?.detalle as unknown;
+  if (
+    detalle &&
+    typeof detalle === "object" &&
+    Array.isArray((detalle as { datos?: unknown }).datos)
+  ) {
+    const datosFiltrados = (detalle as { datos: Array<{ Etiqueta?: unknown }> }).datos.filter(
+      (item) => !esEtiquetaOtros(item?.Etiqueta)
+    );
+    return {
+      ...data,
+      detalle: { ...(detalle as object), datos: datosFiltrados } as T,
+    };
+  }
+  return data;
+}
 
 /** Usa el proxy de Next.js en el navegador para evitar CORS y exponer credenciales */
 async function fetchViaProxy<T>(
@@ -54,7 +80,7 @@ async function fetchViaProxy<T>(
       },
     };
   }
-  return { success: true, data };
+  return { success: true, data: ocultarOtrosDeRespuesta(data) };
 }
 
 function getEndpointName(path: string): string {
@@ -78,7 +104,11 @@ function createReporteFetcher<T>(endpointPath: string) {
     if (typeof window !== "undefined") {
       return fetchViaProxy<T>(endpointName, params, signal);
     }
-    return apiPostFormData<ReporteVisualResponse<T>>(endpointPath, params);
+    const result = await apiPostFormData<ReporteVisualResponse<T>>(endpointPath, params);
+    if ("success" in result && result.success && "data" in result) {
+      return { ...result, data: ocultarOtrosDeRespuesta(result.data) };
+    }
+    return result;
   };
 }
 

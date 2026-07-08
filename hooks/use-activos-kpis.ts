@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { FechasParams, ReportePorZonaDetalle } from "@/api/types";
 import { getActivos } from "@/api/reporteVisual";
 import { parseLocalDate } from "@/lib/date-utils";
-import { parseNumberLabel } from "@/lib/utils";
+import { esEtiquetaOtros, parseNumberLabel } from "@/lib/utils";
 
 export type ActivosKpis = {
   totalActivos: number;
@@ -106,7 +106,7 @@ function calculateActivosKpis(
   // Zonas
   const zonas = reportePorZona?.datos ?? [];
   const zonasSorted = zonas
-    .filter(d => !d.Etiqueta.includes("#OTR") && !d.Etiqueta.includes("#EMP"))
+    .filter(d => !esEtiquetaOtros(d.Etiqueta) && !d.Etiqueta.includes("#EMP"))
     .map(d => ({
       zona: d.Etiqueta,
       count: parseNumberLabel(d.Valor),
@@ -127,7 +127,7 @@ function calculateActivosKpis(
   // Años
   const anios = reportePorAnio?.datos ?? [];
   const aniosSorted = anios
-    .filter(d => !d.Etiqueta.includes("EMP") && !d.Etiqueta.includes("OTR"))
+    .filter(d => !d.Etiqueta.includes("EMP") && !esEtiquetaOtros(d.Etiqueta))
     .map(d => ({
       anio: d.Etiqueta,
       count: parseNumberLabel(d.Valor),

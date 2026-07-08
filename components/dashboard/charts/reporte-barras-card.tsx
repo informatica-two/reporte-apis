@@ -14,8 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Bar, BarChart, Cell, XAxis, YAxis } from "recharts";
-import { formatMoney } from "@/lib/utils";
-import { parseNumberLabel } from "@/lib/utils";
+import { esEtiquetaOtros, formatMoney, parseNumberLabel } from "@/lib/utils";
 import type { ReportePorZonaDetalle } from "@/api/types";
 
 /** Paleta por barra (orden mayor → menor): la primera destaca. */
@@ -52,6 +51,7 @@ export function ReporteBarrasCard({
 }: ReporteBarrasCardProps) {
   const datos = reporte?.datos ?? [];
   const chartData = datos
+    .filter((d) => !esEtiquetaOtros(d.Etiqueta))
     .map((d) => ({
       name: d.Etiqueta,
       valor: parseNumberLabel(d.Valor),

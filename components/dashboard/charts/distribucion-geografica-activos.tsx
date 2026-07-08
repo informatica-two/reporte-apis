@@ -7,10 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { formatNumber, parseNumberLabel } from "@/lib/utils";
+import { cn, esEtiquetaOtros, formatNumber, parseNumberLabel } from "@/lib/utils";
 import type { ReportePorZonaDetalle } from "@/api/types";
 import { MapPin, TrendingUp, TrendingDown } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 type DistribucionGeograficaActivosProps = {
   reportePorZona: ReportePorZonaDetalle | null;
@@ -23,7 +22,7 @@ export function DistribucionGeograficaActivos({ reportePorZona }: DistribucionGe
       name: d.Etiqueta,
       value: parseNumberLabel(d.Valor),
     }))
-    .filter(d => !d.name.includes("#OTR") && !d.name.includes("#EMP"))
+    .filter(d => !esEtiquetaOtros(d.name) && !d.name.includes("#EMP"))
     .sort((a, b) => b.value - a.value);
 
   const total = sorted.reduce((s, d) => s + d.value, 0);

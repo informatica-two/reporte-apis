@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import { formatMoney, formatNumber, parseNumberLabel } from "@/lib/utils";
+import { esEtiquetaOtros, formatMoney, formatNumber, parseNumberLabel } from "@/lib/utils";
 import type { ReportePorZonaDetalle } from "@/api/types";
 
 const TIPO_CREDITO_LABELS: Record<string, string> = {
@@ -64,7 +64,7 @@ export function ComparativoActivosVentasTipoCredito({
 
   const tipos = Array.from(
     new Set([...activosMap.keys(), ...ventaMap.keys()])
-  ).filter((t) => !t.includes("#EMP") && !t.includes("#OTR"));
+  ).filter((t) => !t.includes("#EMP") && !esEtiquetaOtros(t));
 
   const chartData = tipos
     .map((tipo) => {
@@ -79,7 +79,7 @@ export function ComparativoActivosVentasTipoCredito({
         ventaPct: totalVenta > 0 ? (venta / totalVenta) * 100 : 0,
       };
     })
-    .filter((d) => d.activos > 0 || d.venta > 0)
+    .filter((d) => (d.activos > 0 || d.venta > 0) && !esEtiquetaOtros(d.name))
     .sort((a, b) => b.activosPct - a.activosPct);
 
   if (chartData.length === 0) return null;

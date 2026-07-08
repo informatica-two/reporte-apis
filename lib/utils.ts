@@ -38,3 +38,42 @@ export function parseNumberLabel(label: string | undefined): number {
   const n = parseFloat(cleaned);
   return Number.isNaN(n) ? 0 : n;
 }
+
+/**
+ * Determina si una etiqueta/nombre corresponde a un valor tipo "Otros"/"Otras"
+ * que no debe mostrarse en ninguna gráfica, KPI o tabla del dashboard.
+ * Cubre variantes como "Otros", "Otras", "#OTR", "OTR" (código corto usado por
+ * la API para agrupar zonas/municipios/categorías residuales) y frases como
+ * "Otras zonas" u "Otros municipios".
+ */
+export function esEtiquetaOtros(valor: unknown): boolean {
+  if (typeof valor !== "string") return false;
+  // Quita "#" inicial (la API antepone "#" a algunos códigos de agrupación)
+  // y espacios sobrantes, y pasa a minúsculas.
+  const normalizado = valor.trim().toLowerCase().replace(/^#+/, "").trim();
+  if (!normalizado) return false;
+
+  if (normalizado === "otros" || normalizado === "otras" || normalizado === "otr") {
+    return true;
+  }
+
+  // "otras zonas", "otros municipios", "otra categoría", etc.
+  if (/^otr[oa]s?(\b|_)/.test(normalizado)) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Filtra de un arreglo de datos cualquier elemento cuya etiqueta sea
+ * "Otros" u "Otras" (en cualquier variante de mayúsculas/espacios).
+ * `getEtiqueta` extrae el texto de la etiqueta de cada elemento.
+ */
+export function filtrarDatosOtros<T>(
+  datos: T[] | undefined | null,
+  getEtiqueta: (item: T) => unknown
+): T[] {
+  if (!datos || !Array.isArray(datos)) return datos ?? [];
+  return datos.filter((item) => !esEtiquetaOtros(getEtiqueta(item)));
+}
