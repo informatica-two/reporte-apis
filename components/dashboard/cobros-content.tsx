@@ -4,7 +4,7 @@ import * as React from "react";
 import { useCobrosDetalles } from "@/hooks/use-cobros-detalles";
 import { useCobrosKpis } from "@/hooks/use-cobros-kpis";
 import { useFechasState } from "@/hooks/use-fechas-state";
-import type { ReportePorZonaDetalle, FechasParams } from "@/api/types";
+import type { ReportePorZonaDetalle, VentaCobroPorZonaDetalle, FechasParams } from "@/api/types";
 import { DashboardHeader } from "./dashboard-header";
 import { KpiQueryError } from "./kpi-query-error";
 import { ReportePorMedioPieCard } from "./charts/reporte-por-medio-pie-card";
@@ -28,7 +28,7 @@ function ReporteBarrasCardSkeleton() {
         <Skeleton className="mt-1 h-3 w-56" />
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-4 px-4 pt-0">
-        <Skeleton className="h-[280px] w-full shrink-0 rounded-lg" />
+        <Skeleton className="h-70 w-full shrink-0 rounded-lg" />
         <div className="rounded-lg border border-border/60 bg-muted/40 overflow-hidden">
           <div className="border-b border-border/60 bg-muted/80 px-3 py-2 flex gap-2">
             <Skeleton className="h-3 w-12" />
@@ -53,6 +53,7 @@ type CobrosContentProps = {
   initialReportePorTipoDocumento: ReportePorZonaDetalle | null;
   initialReportePorMunicipio: ReportePorZonaDetalle | null;
   initialReportePorZona: ReportePorZonaDetalle | null;
+  initialVentaCobroPorZona?: VentaCobroPorZonaDetalle | null;
   initialCobrosData: any | null;
   initialVentaData?: any | null;
   initialFechas: FechasParams;
@@ -64,6 +65,7 @@ export function CobrosContent({
   initialReportePorTipoDocumento,
   initialReportePorMunicipio,
   initialReportePorZona,
+  initialVentaCobroPorZona,
   initialCobrosData,
   initialVentaData,
   initialFechas,
@@ -72,12 +74,13 @@ export function CobrosContent({
   const { fechas, isInitialFechas, initialDataTimestamp, onDateChange } = 
     useFechasState({ initialFechas });
   
-  const { reportePorMedio, reportePorTipoDocumento, reportePorMunicipio, reportePorZona, state, error, retry } =
+  const { reportePorMedio, reportePorTipoDocumento, reportePorMunicipio, reportePorZona, ventaCobroPorZona, state, error, retry } =
     useCobrosDetalles(fechas, {
       initialReportePorMedio: isInitialFechas ? initialReportePorMedio : undefined,
       initialReportePorTipoDocumento: isInitialFechas ? initialReportePorTipoDocumento : undefined,
       initialReportePorMunicipio: isInitialFechas ? initialReportePorMunicipio : undefined,
       initialReportePorZona: isInitialFechas ? initialReportePorZona : undefined,
+      initialVentaCobroPorZona: isInitialFechas ? initialVentaCobroPorZona : undefined,
       initialDataUpdatedAt: isInitialFechas ? initialDataTimestamp : undefined,
     });
 
@@ -195,8 +198,8 @@ export function CobrosContent({
             {/* Ranking de Zonas - Ancho completo */}
             <RankingZonasCobros reportePorZona={reportePorZona} />
 
-            {/* Mapa de Calor de Municipios - Ancho completo */}
-            <MapaCalorMunicipios reportePorMunicipio={reportePorMunicipio} />
+            {/* Intensidad de Cobro por Zona (% cobro mes actual vs venta mes anterior) - Ancho completo */}
+            <MapaCalorMunicipios ventaCobroPorZona={ventaCobroPorZona} />
           </>
         )}
       </div>

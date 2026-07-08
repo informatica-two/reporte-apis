@@ -1,8 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getCobrosDetalle1, getCobrosDetalle2, getCobrosDetalle3, getCobrosDetalle4 } from "@/api/reporteVisual";
-import type { FechasParams, ReportePorZonaDetalle } from "@/api/types";
+import { getCobrosDetalle1, getCobrosDetalle2, getCobrosDetalle3, getCobrosDetalle4, getVentaDetalle6 } from "@/api/reporteVisual";
+import type { FechasParams, ReportePorZonaDetalle, VentaCobroPorZonaDetalle } from "@/api/types";
 import { queryKeys } from "./query-keys";
 
 type CobrosDetalles = {
@@ -10,6 +10,7 @@ type CobrosDetalles = {
   reportePorTipoDocumento: ReportePorZonaDetalle | null;
   reportePorMunicipio: ReportePorZonaDetalle | null;
   reportePorZona: ReportePorZonaDetalle | null;
+  ventaCobroPorZona: VentaCobroPorZonaDetalle | null;
 };
 
 type UseCobrosDetallesOptions = {
@@ -17,6 +18,7 @@ type UseCobrosDetallesOptions = {
   initialReportePorTipoDocumento?: ReportePorZonaDetalle | null;
   initialReportePorMunicipio?: ReportePorZonaDetalle | null;
   initialReportePorZona?: ReportePorZonaDetalle | null;
+  initialVentaCobroPorZona?: VentaCobroPorZonaDetalle | null;
   initialDataUpdatedAt?: number;
 };
 
@@ -24,11 +26,12 @@ async function fetchCobrosDetalles(
   params: FechasParams,
   signal: AbortSignal,
 ): Promise<CobrosDetalles> {
-  const [cobrosDetalle1Res, cobrosDetalle2Res, cobrosDetalle3Res, cobrosDetalle4Res] = await Promise.all([
+  const [cobrosDetalle1Res, cobrosDetalle2Res, cobrosDetalle3Res, cobrosDetalle4Res, ventaDetalle6Res] = await Promise.all([
     getCobrosDetalle1(params, signal),
     getCobrosDetalle2(params, signal),
     getCobrosDetalle3(params, signal),
     getCobrosDetalle4(params, signal),
+    getVentaDetalle6(params, signal),
   ]);
 
   if (!cobrosDetalle1Res.success) {
@@ -43,6 +46,9 @@ async function fetchCobrosDetalles(
   if (!cobrosDetalle4Res.success) {
     throw new Error(cobrosDetalle4Res.error.message);
   }
+  if (!ventaDetalle6Res.success) {
+    throw new Error(ventaDetalle6Res.error.message);
+  }
 
   const reportePorMedio =
     "data" in cobrosDetalle1Res ? cobrosDetalle1Res.data.detalle : null;
@@ -52,6 +58,8 @@ async function fetchCobrosDetalles(
     "data" in cobrosDetalle3Res ? cobrosDetalle3Res.data.detalle : null;
   const reportePorZona =
     "data" in cobrosDetalle4Res ? cobrosDetalle4Res.data.detalle : null;
+  const ventaCobroPorZona =
+    "data" in ventaDetalle6Res ? ventaDetalle6Res.data.detalle : null;
 
   if (!reportePorMedio || !Array.isArray(reportePorMedio.datos)) {
     throw new Error("Datos de medio inválidos");
@@ -65,22 +73,26 @@ async function fetchCobrosDetalles(
   if (!reportePorZona || !Array.isArray(reportePorZona.datos)) {
     throw new Error("Datos de zona inválidos");
   }
+  if (!ventaCobroPorZona || !Array.isArray(ventaCobroPorZona.datos)) {
+    throw new Error("Datos de venta vs cobro por zona inválidos");
+  }
 
-  return { reportePorMedio, reportePorTipoDocumento, reportePorMunicipio, reportePorZona };
+  return { reportePorMedio, reportePorTipoDocumento, reportePorMunicipio, reportePorZona, ventaCobroPorZona };
 }
 
 export function useCobrosDetalles(
   fechas: FechasParams | null,
   options: UseCobrosDetallesOptions = {},
 ) {
-  const { initialReportePorMedio, initialReportePorTipoDocumento, initialReportePorMunicipio, initialReportePorZona } = options;
+  const { initialReportePorMedio, initialReportePorTipoDocumento, initialReportePorMunicipio, initialReportePorZona, initialVentaCobroPorZona } = options;
   const initialData =
-    initialReportePorMedio || initialReportePorTipoDocumento || initialReportePorMunicipio || initialReportePorZona
+    initialReportePorMedio || initialReportePorTipoDocumento || initialReportePorMunicipio || initialReportePorZona || initialVentaCobroPorZona
       ? {
           reportePorMedio: initialReportePorMedio,
           reportePorTipoDocumento: initialReportePorTipoDocumento,
           reportePorMunicipio: initialReportePorMunicipio,
           reportePorZona: initialReportePorZona,
+          ventaCobroPorZona: initialVentaCobroPorZona,
         }
       : undefined;
 
@@ -102,6 +114,7 @@ export function useCobrosDetalles(
     reportePorTipoDocumento: query.data?.reportePorTipoDocumento ?? null,
     reportePorMunicipio: query.data?.reportePorMunicipio ?? null,
     reportePorZona: query.data?.reportePorZona ?? null,
+    ventaCobroPorZona: query.data?.ventaCobroPorZona ?? null,
     state: query.isFetching || query.isLoading
       ? "loading"
       : query.isError
